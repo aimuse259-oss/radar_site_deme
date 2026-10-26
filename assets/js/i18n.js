@@ -28,6 +28,15 @@ var IS_RTL = LANG === 'he' || LANG === 'ar';
 document.documentElement.lang = LANG;
 document.documentElement.dir = IS_RTL ? 'rtl' : 'ltr';
 
+try {
+  var langParam = new URLSearchParams(window.location.search).get('lang');
+  if (langParam === 'he') {
+    var bareUrl = new URL(window.location.href);
+    bareUrl.searchParams.delete('lang');
+    window.history.replaceState(null, '', bareUrl.toString());
+  }
+} catch (e) {}
+
 var T = {
   he: {
     dir: 'rtl',
@@ -280,7 +289,11 @@ function getCat10Title(data) {
 
 function getLangUrl(lang) {
   var u = new URL(window.location.href);
-  u.searchParams.set('lang', lang);
+  if (lang === 'he') {
+    u.searchParams.delete('lang');
+  } else {
+    u.searchParams.set('lang', lang);
+  }
   return u.toString();
 }
 

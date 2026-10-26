@@ -54,8 +54,8 @@ html, body {
   color: var(--text);
 }
 
-body {
-  overflow-x: hidden;
+html, body {
+  overflow-x: clip;
 }
 
 button, input, select {
@@ -281,7 +281,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 
 #sidebar-search {
-  display: none;
+  display: block;
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
@@ -1084,6 +1084,10 @@ html[dir="ltr"] .history-cat-tab {
 @media (max-width: 700px) {
   .desktop-only {
     display: none !important;
+  }
+
+  #map-home .leaflet-container, #alert-map .leaflet-container {
+    touch-action: pan-x pan-y pinch-zoom;
   }
 }
 
