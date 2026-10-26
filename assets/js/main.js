@@ -21,6 +21,10 @@ function applyStaticTranslations() {
   setText('history-loading', t.historyLoading);
   setText('tab-btn-alerts', t.tabAlerts);
   setText('tab-btn-settings', t.tabSettings);
+  setText('settings-target-label', t.settingsTargetLabel);
+  setText('settings-target-sub', t.settingsTargetSub);
+  setText('settings-sound-group-label', t.settingsSoundGroupLabel);
+  setText('settings-sound-group-sub', t.settingsSoundGroupSub);
   setText('settings-areas-label', t.settingsAreasLabel);
   setText('settings-areas-sub', t.settingsAreasSub);
   setPlaceholder('area-search', t.areaSearchPlaceholder);
@@ -38,10 +42,6 @@ function applyStaticTranslations() {
   setText('platforms-label', t.platforms);
   setPlaceholder('sidebar-search', t.searchPlaceholder);
   setPlaceholder('alert-search', t.searchPlaceholder);
-  var homeFooter = document.getElementById('home-footer');
-  if (homeFooter) {
-    homeFooter.innerHTML = creditsHTML();
-  }
   var settingsCredits = document.getElementById('settings-credits');
   if (settingsCredits) {
     settingsCredits.innerHTML = creditsHTML();

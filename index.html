@@ -52,25 +52,29 @@
       <div id="tab-settings" class="tab-content">
         <div id="settings-content">
           <div class="settings-section">
-            <div class="settings-label" id="settings-areas-label"></div>
-            <div class="settings-sublabel" id="settings-areas-sub"></div>
-            <input id="area-search" type="text" autocomplete="off">
-            <div id="area-list"></div>
-            <button id="clear-areas-btn" type="button"></button>
-          </div>
-          <div class="settings-divider"></div>
-          <div class="settings-section">
-            <div class="settings-label" id="settings-cities-label"></div>
-            <div class="settings-sublabel" id="settings-cities-sub"></div>
-            <div id="city-search-wrap">
-              <input id="city-search" type="text" autocomplete="off">
+            <div class="settings-label" id="settings-target-label"></div>
+            <div class="settings-sublabel" id="settings-target-sub"></div>
+            <div class="settings-subgroup">
+              <div class="settings-label settings-subhead" id="settings-areas-label"></div>
+              <div class="settings-sublabel" id="settings-areas-sub"></div>
+              <input id="area-search" type="text" autocomplete="off">
+              <div id="area-list"></div>
+              <button id="clear-areas-btn" type="button"></button>
             </div>
-            <div id="city-autocomplete" style="display:none"></div>
-            <div id="selected-cities"></div>
-            <button id="clear-cities-btn" type="button"></button>
+            <div class="settings-subgroup">
+              <div class="settings-label settings-subhead" id="settings-cities-label"></div>
+              <div class="settings-sublabel" id="settings-cities-sub"></div>
+              <div id="city-search-wrap">
+                <input id="city-search" type="text" autocomplete="off">
+              </div>
+              <div id="city-autocomplete" style="display:none"></div>
+              <div id="selected-cities"></div>
+              <button id="clear-cities-btn" type="button"></button>
+            </div>
           </div>
-          <div class="settings-divider"></div>
           <div class="settings-section">
+            <div class="settings-label" id="settings-sound-group-label"></div>
+            <div class="settings-sublabel" id="settings-sound-group-sub"></div>
             <div class="sound-toggle-row">
               <div>
                 <div class="settings-label" id="sound-label"></div>
@@ -85,8 +89,17 @@
               <select id="sound-select" class="sound-select"></select>
               <button id="sound-preview-btn" class="sound-preview-btn" type="button">▶</button>
             </div>
+            <div class="sound-toggle-row">
+              <div>
+                <div class="settings-label" id="readout-label"></div>
+                <div class="settings-sublabel" id="readout-sub"></div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="readout-toggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
           </div>
-          <div class="settings-divider"></div>
           <div class="settings-section desktop-only">
             <div class="sound-toggle-row">
               <div>
@@ -99,20 +112,6 @@
               </label>
             </div>
           </div>
-          <div class="settings-divider desktop-only"></div>
-          <div class="settings-section">
-            <div class="sound-toggle-row">
-              <div>
-                <div class="settings-label" id="readout-label"></div>
-                <div class="settings-sublabel" id="readout-sub"></div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" id="readout-toggle">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
-          <div class="settings-divider"></div>
           <div class="settings-section">
             <div class="settings-label" id="platforms-label"></div>
             <div class="social-links">
@@ -144,7 +143,6 @@
       </div>
     </div>
   </div>
-  <footer id="home-footer"></footer>
 </div>
 <div id="alert-view">
   <h1 id="alert-title"></h1>
