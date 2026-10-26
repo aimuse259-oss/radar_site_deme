@@ -1,0 +1,7 @@
+Audio ownership commitment
+Date: 2026-10-26
+Algorithm: SHA-256
+Files counted: 5916
+Aggregate: ea92a5c956f101f00ea64cf50d232985a52e85c9c9ee8c556d56d89bd4747af5
+How to verify: take the private manifest that maps each audio filename to its SHA-256 hash, sort the filenames, concatenate the 5916 hash strings in that order, and compute SHA-256 of the result. It must equal the aggregate above.
+The full manifest is held privately by the owner and is not published here.
