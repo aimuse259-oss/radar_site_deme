@@ -74,7 +74,7 @@ function renderAreasList() {
   }
   var searchEl = document.getElementById('area-search');
   var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
-  var districts = getDistricts();
+  var districts = getDistricts().slice().sort(function(a, b) { return a.name.localeCompare(b.name, LANG); });
   var html = '';
   var shown = 0;
   districts.forEach(function(d) {
@@ -105,8 +105,10 @@ function renderAreasList() {
       if (typeof applySelectionFilter === 'function') {
         applySelectionFilter();
       }
+      updateAreasSummary();
     });
   });
+  updateAreasSummary();
 }
 
 function renderSelectedCities() {
@@ -190,6 +192,46 @@ function cityAutocomplete(q) {
       }
     });
   });
+}
+
+function areaDisplayName(hebrew) {
+  var districts = getDistricts();
+  for (var i = 0; i < districts.length; i++) {
+    if (districts[i].hebrew === hebrew) {
+      return districts[i].name;
+    }
+  }
+  return hebrew;
+}
+
+function updateAreasSummary() {
+  var el = document.getElementById('settings-areas-summary');
+  if (!el) {
+    return;
+  }
+  if (!selectedAreas.length) {
+    el.textContent = t.areasSummaryAll;
+    return;
+  }
+  var names = selectedAreas.map(areaDisplayName).join(', ');
+  if (names.length > 80) {
+    names = names.slice(0, 80) + '…';
+  }
+  el.textContent = names;
+}
+
+function setAreasCollapsed(collapsed) {
+  var body = document.getElementById('settings-areas-body');
+  var chev = document.getElementById('settings-areas-chevron');
+  if (body) {
+    body.style.display = collapsed ? 'none' : '';
+  }
+  if (chev) {
+    chev.textContent = collapsed ? '▾' : '▴';
+  }
+  try {
+    localStorage.setItem('radar_areas_collapsed', collapsed ? '1' : '0');
+  } catch (e) {}
 }
 
 function initSettings() {
@@ -315,6 +357,16 @@ function initSettings() {
   });
   renderAreasList();
   renderSelectedCities();
+  var areasHead = document.getElementById('settings-areas-head');
+  if (areasHead) {
+    areasHead.addEventListener('click', function() {
+      var body = document.getElementById('settings-areas-body');
+      setAreasCollapsed(!body || body.style.display !== 'none');
+    });
+  }
+  try {
+    setAreasCollapsed(localStorage.getItem('radar_areas_collapsed') === '1');
+  } catch (e) {}
   initLocationChoice();
 }
 
