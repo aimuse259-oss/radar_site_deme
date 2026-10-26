@@ -19,7 +19,7 @@ function extractCities(doc) {
 }
 
 function catMetaFor(doc) {
-  return t.cat[String(doc.cat)] || { emoji: '🚨', text: doc.title || '', instruction: '' };
+  return t.cat[String(doc.cat)] || { emoji: '🚨', text: getCat10Title(doc) || doc.title || '', instruction: '' };
 }
 
 function formatTs(raw) {
@@ -162,7 +162,7 @@ function sendBrowserNotif(doc, docId) {
   if (!('Notification' in window) || Notification.permission !== 'granted') {
     return;
   }
-  var catMeta = t.cat[String(doc.cat)] || { emoji: '🚨', text: 'Alert', instruction: '' };
+  var catMeta = catMetaFor(doc);
   var cityNames = extractCities(doc);
   var relevant = qualifyingCities(cityNames);
   if (!relevant.length) {
@@ -784,7 +784,7 @@ function loadHistory() {
     });
     container.innerHTML = merged.map(function(group) {
       var color = catColor(group.cat);
-      var catMeta = t.cat[group.cat] || { emoji: '🚨', text: group.title };
+      var catMeta = t.cat[group.cat] || { emoji: '🚨', text: getCat10Title(group) || group.title };
       var timeStr = formatHistoryTime(group.uniqueTimes);
       var citiesStr = group.cities.map(function(n) {
         return getCityName(n);
@@ -925,7 +925,7 @@ function initHistoryAlertPage(ids) {
         return;
       }
       var cat = String(validDocs[0].cat);
-      var catMeta = t.cat[cat] || { emoji: '🚨', text: validDocs[0].title || '🚨', instruction: '' };
+      var catMeta = t.cat[cat] || { emoji: '🚨', text: getCat10Title(validDocs[0]) || validDocs[0].title || '🚨', instruction: '' };
       var cityNames = [];
       var allTimes = [];
       validDocs.forEach(function(data) {

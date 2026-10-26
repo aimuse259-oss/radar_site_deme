@@ -429,7 +429,7 @@ function createDetailMap(cityNames, cat) {
       if (!key) {
         return;
       }
-      if (markersByCity[key] || hullLayer) {
+      if (markersByCity[key]) {
         li.classList.add('clickable');
         li.style.cursor = 'pointer';
         li.addEventListener('click', function() {
