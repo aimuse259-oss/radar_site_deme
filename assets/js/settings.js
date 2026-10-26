@@ -395,12 +395,35 @@ function haversineKm(lat1, lng1, lat2, lng2) {
 }
 
 function findCityForLocation(lat, lng) {
+  var inside = [];
   for (var i = 0; i < CIPO_KEYS.length; i++) {
     var key = CIPO_KEYS[i];
     var entry = CIPO[key];
     if (entry && entry.polygon && entry.polygon.length >= 3 && pointInPolygon(lat, lng, entry.polygon)) {
-      return { key: key, nearest: false };
+      inside.push(key);
     }
+  }
+  if (inside.length === 1) {
+    return { key: inside[0], nearest: false };
+  }
+  if (inside.length > 1) {
+    var bestIn = null;
+    var bestInD = Infinity;
+    for (var k = 0; k < inside.length; k++) {
+      var eIn = CIPO[inside[k]];
+      if (!eIn || typeof eIn.latitude !== 'number' || typeof eIn.longitude !== 'number') {
+        continue;
+      }
+      var dIn = haversineKm(lat, lng, eIn.latitude, eIn.longitude);
+      if (dIn < bestInD) {
+        bestInD = dIn;
+        bestIn = inside[k];
+      }
+    }
+    if (bestIn) {
+      return { key: bestIn, nearest: false };
+    }
+    return { key: inside[0], nearest: false };
   }
   var best = null;
   var bestD = Infinity;

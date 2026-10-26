@@ -206,7 +206,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 
 #clock-date {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
   color: var(--muted);
   margin-bottom: 2px;
   overflow-wrap: break-word;
@@ -217,6 +219,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   font-weight: 700;
   color: var(--text);
   font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  text-shadow: 0 0 18px rgba(229, 72, 77, 0.25);
   line-height: 1.2;
 }
 
@@ -1098,6 +1102,7 @@ html[dir="ltr"] .history-cat-tab {
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    height: 100vh;
   }
 
   #home-main {

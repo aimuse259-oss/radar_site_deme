@@ -95,7 +95,7 @@ var T = {
     creditAreas: 'התאמת מרחבים ליישובים באדיבות',
     creditData: 'נתוני ההתרעות באדיבות',
     creditHebcal: 'התאריך העברי באתר מופעל באמצעות Hebcal.com (רישיון Creative Commons Attribution 4.0)',
-    disclaimer: 'האתר הזה אינו ערוץ רשמי של פיקוד העורף, ואין לראות בו אמצעי בטיחות בשעת חירום. המידע כאן הוא לידיעה בלבד, ואינו מחליף הנחיה רשמית של פיקוד העורף או של גורם מוסמך אחר.',
+    disclaimer: 'אתר זה אינו ערוץ רשמי של פיקוד העורף, ואין לראות בו אמצעי בטיחות בשעת חירום. המידע כאן הוא לידיעה בלבד, ואינו מחליף הנחיה רשמית של פיקוד העורף או של גורם מוסמך אחר.',
     cat: {
       "1":  { emoji: '🚨', text: 'צבע אדום', instruction: 'היכנסו למרחב המוגן.' },
       "5":  { emoji: '🌊', text: 'חשש לצונאמי', instruction: 'יש להתרחק קילומטר אחד לפחות מהחוף.' },
@@ -360,6 +360,6 @@ function creditsHTML() {
   var hebcalLine = t.creditHebcal.replace('Hebcal.com', hebcalLink);
   return '<div class="credits-line">' + t.creditAreas + ' ' + tzofarLink + '</div>' +
     '<div class="credits-line">' + t.creditData + ' ' + hfcLink + '</div>' +
-    '<div class="credits-line">' + hebcalLine + '</div>' +
+    (LANG === 'he' ? '<div class="credits-line">' + hebcalLine + '</div>' : '') +
     '<div class="credits-disclaimer">' + t.disclaimer + '</div>';
 }
