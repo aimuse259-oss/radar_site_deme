@@ -1,0 +1,280 @@
+var SUPPORTED_LANGS = ['he', 'en', 'ru', 'ar'];
+var LANG_NAMES = { he: 'עברית', en: 'English', ru: 'Русский', ar: 'العربية' };
+
+function detectLang() {
+  var p = null;
+  try {
+    p = new URLSearchParams(window.location.search).get('lang');
+  } catch (e) {
+    p = null;
+  }
+  if (p && SUPPORTED_LANGS.indexOf(p) !== -1) {
+    try {
+      localStorage.setItem('radar_lang', p);
+    } catch (e) {}
+    return p;
+  }
+  try {
+    var saved = localStorage.getItem('radar_lang');
+    if (saved && SUPPORTED_LANGS.indexOf(saved) !== -1) {
+      return saved;
+    }
+  } catch (e) {}
+  return 'he';
+}
+
+var LANG = detectLang();
+var IS_RTL = LANG === 'he' || LANG === 'ar';
+document.documentElement.lang = LANG;
+document.documentElement.dir = IS_RTL ? 'rtl' : 'ltr';
+
+var T = {
+  he: {
+    dir: 'rtl',
+    siteTitle: 'רדאר 📡 - צבע אדום',
+    noAlerts: 'אין התרעות פעילות',
+    toHistory: 'להיסטוריה ←',
+    backToAlerts: '← לחזרה להתרעות',
+    historyTitle: 'התרעות מה-24 שעות האחרונות',
+    historyLoading: 'טוען היסטוריה...',
+    historyEmpty: 'אין היסטוריה להצגה.',
+    historyError: 'שגיאה בטעינת היסטוריה',
+    tabAlerts: 'התרעות',
+    tabSettings: 'הגדרות',
+    settingsAreasLabel: 'בחירת מרחבים להתרעה',
+    settingsAreasSub: 'מרחב שנבחר כולל את כל היישובים שבו. אם לא נבחר דבר, יוצגו כל ההתרעות.',
+    areaSearchPlaceholder: 'חיפוש מרחב...',
+    clearSelection: 'נקה בחירה',
+    noAreasFound: 'לא נמצאו מרחבים',
+    settingsCitiesLabel: 'בחירת יישובים להתרעה',
+    settingsCitiesSub: 'ללא הגבלה. תוצגנה רק התרעות הרלוונטיות לבחירה.',
+    addCity: '+ הוסף יישוב',
+    cityPlaceholder: 'שם יישוב...',
+    soundLabel: '🔊 הפעלת סאונד',
+    soundSub: 'סאונד התרעה יופעל בהתאם לבחירת מרחבים ויישובים.',
+    notifLabel: '🔔 התרעות שולחן עבודה',
+    notifSub: 'קופצת התרעה גם כשהטאב לא פעיל.',
+    readoutLabel: '🗣️ הקראה בעת אזעקה',
+    readoutSub: 'יקריא את שמות היישובים בשפה שנבחרה, בהתאם לבחירת מרחבים ויישובים.',
+    platforms: 'הפלטפורמות שלנו',
+    searchPlaceholder: '🔍 חיפוש יישוב...',
+    cities: 'יישובים',
+    notFound: '❌ אירוע לא נמצא',
+    loadError: '❌ שגיאה בטעינת נתונים',
+    loading: 'טוען...',
+    themeHint: 'מעבר בין מצב כהה ובהיר',
+    tzofarName: 'צופר - צבע אדום',
+    hfcName: 'פיקוד העורף',
+    creditAreas: 'התאמת מרחבים ליישובים באדיבות',
+    creditData: 'נתוני ההתרעות באדיבות',
+    creditHebcal: 'התאריך העברי באתר מופעל באמצעות Hebcal.com (רישיון Creative Commons Attribution 4.0)',
+    disclaimer: 'האתר אינו תחליף להתרעות הרשמיות של פיקוד העורף, אינו קשור לפיקוד העורף או לצופר, ואינו מקור התרעות רשמי בזמן אמת.',
+    cat: {
+      "1":  { emoji: '🚨', text: 'צבע אדום', instruction: 'היכנסו למרחב המוגן.' },
+      "5":  { emoji: '🌊', text: 'חשש לצונאמי', instruction: 'יש להתרחק קילומטר אחד לפחות מהחוף.' },
+      "6":  { emoji: '🛩', text: 'חדירת כלי טיס עוין', instruction: 'היכנסו למרחב המוגן.' },
+      "13": { emoji: '🚪', text: 'חשש לחדירת מחבלים', instruction: 'היכנסו מיד למבנה, נעלו את הדלתות וסגרו את החלונות.' },
+      "3":  { emoji: '🏚', text: 'רעידת אדמה', instruction: 'צאו מיד לשטח פתוח והתרחקו מפריטים שיכולים ליפול.' },
+      "7":  { emoji: '⚠️', text: 'אירוע חומרים מסוכנים', instruction: 'יש להישאר בתוך מבנה, לסגור דלתות וחלונות ולכבות מזגנים.' }
+    }
+  },
+  en: {
+    dir: 'ltr',
+    siteTitle: 'Radar 📡 - Red Alerts',
+    noAlerts: 'No active alerts',
+    toHistory: 'History →',
+    backToAlerts: '← Back to Alerts',
+    historyTitle: 'Alerts from the last 24 hours',
+    historyLoading: 'Loading history...',
+    historyEmpty: 'No history to display.',
+    historyError: 'Error loading history',
+    tabAlerts: 'Alerts',
+    tabSettings: 'Settings',
+    settingsAreasLabel: 'Select districts for alerts',
+    settingsAreasSub: 'A selected district includes all its localities. If nothing is selected, all alerts are shown.',
+    areaSearchPlaceholder: 'Search district...',
+    clearSelection: 'Clear selection',
+    noAreasFound: 'No districts found',
+    settingsCitiesLabel: 'Select localities for alerts',
+    settingsCitiesSub: 'No limit. Only alerts relevant to your selection will be shown.',
+    addCity: '+ Add city',
+    cityPlaceholder: 'City name...',
+    soundLabel: '🔊 Enable Sound',
+    soundSub: 'Alert sound will play based on selected districts and localities.',
+    notifLabel: '🔔 Desktop Notifications',
+    notifSub: 'Get alerts even when the tab is inactive.',
+    readoutLabel: '🗣️ Read aloud on alert',
+    readoutSub: 'Reads locality names aloud in the selected language, based on selected districts and localities.',
+    platforms: 'Our Platforms',
+    searchPlaceholder: '🔍 Search city...',
+    cities: 'cities',
+    notFound: '❌ Event not found',
+    loadError: '❌ Error loading data',
+    loading: 'Loading...',
+    themeHint: 'Switch between dark and light mode',
+    tzofarName: 'Tzofar - Red Alert',
+    hfcName: 'Home Front Command',
+    creditAreas: 'Matching districts to localities courtesy of',
+    creditData: 'Alert data courtesy of',
+    creditHebcal: 'The Hebrew date on this site is powered by Hebcal.com (Creative Commons Attribution 4.0 license)',
+    disclaimer: 'This site is not a substitute for official Home Front Command alerts, is not affiliated with the Home Front Command or Tzofar, and is not an official real-time alert source.',
+    cat: {
+      "1":  { emoji: '🚨', text: 'Red Alert', instruction: 'Enter the protected space.' },
+      "5":  { emoji: '🌊', text: 'Tsunami Warning', instruction: 'Move at least one kilometer from the coast.' },
+      "6":  { emoji: '🛩', text: 'Intrusion of Hostile Aircraft', instruction: 'Enter the protected space.' },
+      "13": { emoji: '🚪', text: 'Fear of Terrorist Infiltration', instruction: 'Enter the building immediately, lock doors and close windows.' },
+      "3":  { emoji: '🏚', text: 'Earthquake', instruction: 'Immediately go to an open area away from falling objects.' },
+      "7":  { emoji: '⚠️', text: 'Hazardous Materials Incident', instruction: 'Stay inside, close doors and windows, turn off the air conditioner.' }
+    }
+  },
+  ru: {
+    dir: 'ltr',
+    siteTitle: 'Радар 📡 - Цева Адом',
+    noAlerts: 'Нет активных оповещений',
+    toHistory: 'История →',
+    backToAlerts: '← Назад к оповещениям',
+    historyTitle: 'Оповещения за последние 24 часа',
+    historyLoading: 'Загрузка истории...',
+    historyEmpty: 'История пуста.',
+    historyError: 'Ошибка загрузки истории',
+    tabAlerts: 'Оповещения',
+    tabSettings: 'Настройки',
+    settingsAreasLabel: 'Выбор районов для оповещений',
+    settingsAreasSub: 'Выбранный район включает все его населённые пункты. Если ничего не выбрано, показываются все оповещения.',
+    areaSearchPlaceholder: 'Поиск района...',
+    clearSelection: 'Очистить выбор',
+    noAreasFound: 'Районы не найдены',
+    settingsCitiesLabel: 'Выбор населённых пунктов для оповещений',
+    settingsCitiesSub: 'Без ограничений. Будут показаны только оповещения, относящиеся к вашему выбору.',
+    addCity: '+ Добавить город',
+    cityPlaceholder: 'Название города...',
+    soundLabel: '🔊 Включить звук',
+    soundSub: 'Звук оповещения воспроизводится согласно выбранным районам и населённым пунктам.',
+    notifLabel: '🔔 Уведомления на рабочем столе',
+    notifSub: 'Уведомления даже когда вкладка неактивна.',
+    readoutLabel: '🗣️ Озвучивание при оповещении',
+    readoutSub: 'Произносит названия населённых пунктов на выбранном языке, согласно выбранным районам и населённым пунктам.',
+    platforms: 'Наши платформы',
+    searchPlaceholder: '🔍 Поиск города...',
+    cities: 'городах',
+    notFound: '❌ Событие не найдено',
+    loadError: '❌ Ошибка загрузки данных',
+    loading: 'Загрузка...',
+    themeHint: 'Переключение между тёмным и светлым режимом',
+    tzofarName: 'Цофар - Цева Адом',
+    hfcName: 'Командование тыла',
+    creditAreas: 'Сопоставление районов и населённых пунктов предоставлено',
+    creditData: 'Данные оповещений предоставлены',
+    creditHebcal: 'Еврейская дата на сайте предоставлена Hebcal.com (лицензия Creative Commons Attribution 4.0)',
+    disclaimer: 'Этот сайт не заменяет официальные оповещения Командования тыла, не связан с Командованием тыла или Цофаром и не является официальным источником оповещений в реальном времени.',
+    cat: {
+      "1":  { emoji: '🚨', text: 'Цева Адом', instruction: 'Войдите в укрытие.' },
+      "5":  { emoji: '🌊', text: 'Предупреждение о цунами', instruction: 'Отойдите не менее чем на один километр от берега.' },
+      "6":  { emoji: '🛩', text: 'Проникновение летательного аппарата', instruction: 'Войдите в укрытие.' },
+      "13": { emoji: '🚪', text: 'Подозрение на проникновение террористов', instruction: 'Войдите в здание, закройте двери и окна.' },
+      "3":  { emoji: '🏚', text: 'Землетрясение', instruction: 'Немедленно перейдите в открытое пространство.' },
+      "7":  { emoji: '⚠️', text: 'Авария с опасными материалами', instruction: 'Оставайтесь в помещении, закройте двери и окна, выключите кондиционер.' }
+    }
+  },
+  ar: {
+    dir: 'rtl',
+    siteTitle: 'رادار 📡 - انذار احمر',
+    noAlerts: 'لا توجد تنبيهات نشطة',
+    toHistory: 'السجل ←',
+    backToAlerts: '← العودة إلى التنبيهات',
+    historyTitle: 'تنبيهات آخر 24 ساعة',
+    historyLoading: 'جارٍ تحميل السجل...',
+    historyEmpty: 'لا يوجد سجل للعرض.',
+    historyError: 'خطأ في تحميل السجل',
+    tabAlerts: 'التنبيهات',
+    tabSettings: 'الإعدادات',
+    settingsAreasLabel: 'اختر المناطق للتنبيه',
+    settingsAreasSub: 'المنطقة المختارة تشمل جميع بلداتها. إذا لم يتم اختيار شيء، ستظهر جميع التنبيهات.',
+    areaSearchPlaceholder: 'ابحث عن منطقة...',
+    clearSelection: 'مسح التحديد',
+    noAreasFound: 'لم يتم العثور على مناطق',
+    settingsCitiesLabel: 'اختر البلدات للتنبيه',
+    settingsCitiesSub: 'اختيار غير محدود. ستظهر فقط التنبيهات المتعلقة باختيارك.',
+    addCity: '+ أضف مدينة',
+    cityPlaceholder: 'اسم المدينة...',
+    soundLabel: '🔊 تفعيل الصوت',
+    soundSub: 'سيُشغَّل صوت التنبيه وفقاً للمناطق والبلدات المختارة.',
+    notifLabel: '🔔 إشعارات سطح المكتب',
+    notifSub: 'تنبيهات حتى عندما تكون التبويبة غير نشطة.',
+    readoutLabel: '🗣️ القراءة بصوت عالٍ عند التنبيه',
+    readoutSub: 'يقرأ أسماء البلدات بصوت عالٍ باللغة المختارة، وفقاً للمناطق والبلدات المختارة.',
+    platforms: 'منصاتنا',
+    searchPlaceholder: '🔍 ابحث عن مدينة...',
+    cities: 'المدن',
+    notFound: '❌ الحدث غير موجود',
+    loadError: '❌ خطأ في تحميل البيانات',
+    loading: 'جارٍ التحميل...',
+    themeHint: 'التبديل بين الوضع الداكن والفاتح',
+    tzofarName: 'تسوفر - اللون الأحمر',
+    hfcName: 'قيادة الجبهة الداخلية',
+    creditAreas: 'مطابقة المناطق للبلدات مقدمة من',
+    creditData: 'بيانات التنبيهات مقدمة من',
+    creditHebcal: 'التاريخ العبري في الموقع مقدم من Hebcal.com (رخصة المشاع الإبداعي نسب المصنف 4.0)',
+    disclaimer: 'هذا الموقع ليس بديلاً عن تنبيهات قيادة الجبهة الداخلية الرسمية، وليس مرتبطاً بقيادة الجبهة الداخلية أو تسوفر، وليس مصدر تنبيهات رسمياً في الوقت الحقيقي.',
+    cat: {
+      "1":  { emoji: '🚨', text: 'اللون الأحمر', instruction: 'ادخل إلى المكان المحمي.' },
+      "5":  { emoji: '🌊', text: 'خطر تسونامي', instruction: 'ابتعد كيلومتراً عن الشاطئ على الأقل.' },
+      "6":  { emoji: '🛩', text: 'تسلل طائرة عدائية', instruction: 'ادخل إلى المكان المحمي.' },
+      "13": { emoji: '🚪', text: 'تسلل مخربين', instruction: 'ادخل المبنى فوراً وأغلق الأبواب والنوافذ.' },
+      "3":  { emoji: '🏚', text: 'هزة أرضية', instruction: 'توجه فوراً إلى منطقة مفتوحة.' },
+      "7":  { emoji: '⚠️', text: 'حادث مواد خطرة', instruction: 'ابق في الداخل وأغلق الأبواب والنوافذ وأوقف المكيف.' }
+    }
+  }
+};
+
+var t = T[LANG];
+
+var CAT10_TITLE_I18N = {
+  en: {
+    'התרעה מקדימה - רדאר 📡': 'Early Warning - Radar 📡',
+    'הנחיה - רדאר 📡': 'Directive - Radar 📡',
+    'סיום אירוע - רדאר 📡': 'Incident Ended - Radar 📡',
+    'מבזק פיקוד העורף - רדאר 📡': 'Home Front Command Alert - Radar 📡'
+  },
+  ru: {
+    'התרעה מקדימה - רדאר 📡': 'Предварительное оповещение - Радар 📡',
+    'הנחיה - רדאר 📡': 'Инструкция - Радар 📡',
+    'סיום אירוע - רדאר 📡': 'Инцидент завершён - Радар 📡',
+    'מבזק פיקוד העורף - רדאר 📡': 'Оповещение Командования тыла - Радар 📡'
+  },
+  ar: {
+    'התרעה מקדימה - רדאר 📡': 'إنذار مبكر - رادار 📡',
+    'הנחיה - רדאר 📡': 'تعليمات - رادار 📡',
+    'סיום אירוע - רדאר 📡': 'انتهاء الحادثة - رادار 📡',
+    'מבזק פיקוד העורף - רדאר 📡': 'تنبيه قيادة الجبهة الداخلية - رادار 📡'
+  }
+};
+
+function getCat10Title(data) {
+  var hebrewTitle = data.title || '';
+  if (LANG === 'he') {
+    return hebrewTitle;
+  }
+  var langMap = CAT10_TITLE_I18N[LANG];
+  if (langMap && langMap[hebrewTitle]) {
+    return langMap[hebrewTitle];
+  }
+  return hebrewTitle;
+}
+
+function getLangUrl(lang) {
+  var u = new URL(window.location.href);
+  u.searchParams.set('lang', lang);
+  return u.toString();
+}
+
+function creditsHTML() {
+  var tzofarLink = '<a href="https://www.tzevaadom.co.il/" target="_blank" rel="noopener">' + t.tzofarName + '</a>';
+  var hfcLink = '<a href="https://www.oref.org.il/" target="_blank" rel="noopener">' + t.hfcName + '</a>';
+  var hebcalLink = '<a href="https://www.hebcal.com/?utm_source=radar-alerts&utm_medium=referral" target="_blank" rel="noopener">Hebcal.com</a>';
+  var hebcalLine = t.creditHebcal.replace('Hebcal.com', hebcalLink);
+  return '<div class="credits-line">' + t.creditAreas + ' ' + tzofarLink + '</div>' +
+    '<div class="credits-line">' + t.creditData + ' ' + hfcLink + '</div>' +
+    '<div class="credits-line">' + hebcalLine + '</div>' +
+    '<div class="credits-disclaimer">' + t.disclaimer + '</div>';
+}

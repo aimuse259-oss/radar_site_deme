@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רדאר 📡 - צבע אדום</title>
+<link rel="stylesheet" href="assets/css/leaflet.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>try{var rt=localStorage.getItem('radar_theme');if(rt==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
+</head>
+<body>
+<header id="site-header">
+  <a id="site-logo-link" href="./"><img id="site-logo" alt="Radar"></a>
+  <div id="site-title">רדאר 📡 - צבע אדום</div>
+  <div id="header-actions">
+    <div id="lang-wrap">
+      <button id="lang-btn" type="button" aria-label="Language">🌐</button>
+      <div id="lang-dropdown" style="display:none"></div>
+    </div>
+    <button id="theme-btn" type="button">☀️</button>
+  </div>
+</header>
+<div id="home-view">
+  <div id="home-main">
+    <div id="map-home"></div>
+    <div id="sidebar">
+      <div id="clock-bar">
+        <div id="clock-date"></div>
+        <div id="clock-time"></div>
+      </div>
+      <div id="sidebar-tabs">
+        <button class="tab-btn active" data-tab="alerts" id="tab-btn-alerts" type="button">התרעות</button>
+        <button class="tab-btn" data-tab="settings" id="tab-btn-settings" type="button">הגדרות</button>
+      </div>
+      <div id="tab-alerts" class="tab-content active">
+        <input id="sidebar-search" type="text" placeholder="🔍 חיפוש יישוב...">
+        <div id="alerts-container">
+          <div id="no-alerts">
+            <div class="icon">📡</div>
+            <div id="no-alerts-text">אין התרעות פעילות</div>
+            <div id="history-link">להיסטוריה ←</div>
+          </div>
+        </div>
+      </div>
+      <div id="history-view">
+        <div id="history-back">← לחזרה להתרעות</div>
+        <div id="history-title">התרעות מה-24 שעות האחרונות</div>
+        <div id="history-container">
+          <div id="history-loading">טוען היסטוריה...</div>
+        </div>
+      </div>
+      <div id="tab-settings" class="tab-content">
+        <div id="settings-content">
+          <div class="settings-section">
+            <div class="settings-label" id="settings-areas-label"></div>
+            <div class="settings-sublabel" id="settings-areas-sub"></div>
+            <input id="area-search" type="text" autocomplete="off">
+            <div id="area-list"></div>
+            <button id="clear-areas-btn" type="button"></button>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-section">
+            <div class="settings-label" id="settings-cities-label"></div>
+            <div class="settings-sublabel" id="settings-cities-sub"></div>
+            <div id="city-search-wrap">
+              <input id="city-search" type="text" autocomplete="off">
+            </div>
+            <div id="city-autocomplete" style="display:none"></div>
+            <div id="selected-cities"></div>
+            <button id="clear-cities-btn" type="button"></button>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-section">
+            <div class="sound-toggle-row">
+              <div>
+                <div class="settings-label" id="sound-label"></div>
+                <div class="settings-sublabel" id="sound-sub"></div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="sound-toggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="sound-select-row">
+              <select id="sound-select" class="sound-select"></select>
+              <button id="sound-preview-btn" class="sound-preview-btn" type="button">▶</button>
+            </div>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-section desktop-only">
+            <div class="sound-toggle-row">
+              <div>
+                <div class="settings-label" id="notif-label"></div>
+                <div class="settings-sublabel" id="notif-sub"></div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notif-toggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="settings-divider desktop-only"></div>
+          <div class="settings-section">
+            <div class="sound-toggle-row">
+              <div>
+                <div class="settings-label" id="readout-label"></div>
+                <div class="settings-sublabel" id="readout-sub"></div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="readout-toggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-section">
+            <div class="settings-label" id="platforms-label"></div>
+            <div class="social-links">
+              <a href="https://t.me/Radar_Alerts" target="_blank" rel="noopener" class="social-link" aria-label="Telegram">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.93 6.686-1.91 8.997c-.144.64-.52.796-1.054.496l-2.9-2.136-1.4 1.347c-.154.155-.284.284-.582.284l.207-2.944 5.345-4.826c.232-.207-.05-.322-.36-.115l-6.603 4.155-2.844-.888c-.617-.194-.63-.617.13-.913l11.1-4.28c.514-.187.965.126.872.823z" fill="#2AABEE"/>
+                </svg>
+              </a>
+              <a href="https://whatsapp.com/channel/0029VbAsDKn2P59n8ws3Sd2E" target="_blank" rel="noopener" class="social-link" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.41A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm5.068 14.017c-.214.601-1.263 1.147-1.74 1.199-.45.05-.87.222-2.933-.611-2.49-1.015-4.09-3.564-4.212-3.73-.12-.165-.982-1.308-.982-2.493 0-1.186.62-1.768.84-2.007.219-.24.477-.3.636-.3l.46.009c.147.006.346-.056.541.413.2.476.68 1.656.74 1.778.06.12.1.262.02.422-.08.16-.12.26-.24.4l-.36.417c-.12.12-.245.25-.106.49.14.24.62 1.022 1.33 1.655.913.814 1.682 1.065 1.921 1.185.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.573-.154 1.135z" fill="#25D366"/>
+                </svg>
+              </a>
+              <a href="https://x.com/radar_alerts_?s=21" target="_blank" rel="noopener" class="social-link" aria-label="X">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L2.25 2.25h6.846l4.258 5.63 5.89-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" fill="#e5e5e5"/>
+                </svg>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61576133079123" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" fill="#1877F2"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-section" id="settings-credits"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer id="home-footer"></footer>
+</div>
+<div id="alert-view">
+  <h1 id="alert-title"></h1>
+  <h2 id="alert-subtitle"></h2>
+  <input id="alert-search" type="text">
+  <div id="alert-content"></div>
+  <div id="alert-map"></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="assets/js/leaflet.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/map.js"></script>
+<script src="assets/js/audio.js"></script>
+<script src="assets/js/settings.js"></script>
+<script src="assets/js/alerts.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
