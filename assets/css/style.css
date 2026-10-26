@@ -14,7 +14,7 @@
   --input-bg: #0e1116;
   --area-bg: #1c222b;
   --hover-bg: rgba(255, 255, 255, 0.06);
-  --tile-filter: brightness(0.9) saturate(0.85);
+  --tile-filter: none;
   --map-bg: #161b22;
   --dropdown-bg: #1c222b;
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
