@@ -302,6 +302,11 @@ function createDetailMap(cityNames, cat) {
   el.style.display = 'block';
   var map = L.map('alert-map', { zoomControl: false }).setView([31.5, 34.9], 8);
   addGoogleTiles(map);
+  function fixDetailMapSize() {
+    map.invalidateSize();
+  }
+  window.addEventListener('load', fixDetailMapSize);
+  setTimeout(fixDetailMapSize, 500);
   var markersByCity = {};
   var bounds = [];
   var hullLayer = null;

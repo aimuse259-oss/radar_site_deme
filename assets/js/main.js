@@ -33,6 +33,12 @@ function applyStaticTranslations() {
   setText('settings-cities-sub', t.settingsCitiesSub);
   setPlaceholder('city-search', t.cityPlaceholder);
   setText('clear-cities-btn', t.clearSelection);
+  setText('settings-loc-label', t.locLabel);
+  setText('settings-loc-sub', t.locSub);
+  setText('loc-btn', t.locBtn);
+  setText('loc-choice-city', t.locCityOnly);
+  setText('loc-choice-area', t.locAreaOnly);
+  setText('loc-choice-both', t.locBoth);
   setText('sound-label', t.soundLabel);
   setText('sound-sub', t.soundSub);
   setText('notif-label', t.notifLabel);
@@ -40,7 +46,6 @@ function applyStaticTranslations() {
   setText('readout-label', t.readoutLabel);
   setText('readout-sub', t.readoutSub);
   setText('platforms-label', t.platforms);
-  setPlaceholder('sidebar-search', t.searchPlaceholder);
   setPlaceholder('alert-search', t.searchPlaceholder);
   var settingsCredits = document.getElementById('settings-credits');
   if (settingsCredits) {
@@ -115,8 +120,16 @@ function applySavedToggles() {
     langDropdown.innerHTML = SUPPORTED_LANGS.filter(function(l) {
       return l !== LANG;
     }).map(function(l) {
-      return '<a class="lang-option" href="' + getLangUrl(l) + '">' + LANG_NAMES[l] + '</a>';
+      return '<a class="lang-option" data-lang="' + l + '" href="' + getLangUrl(l) + '">' + LANG_NAMES[l] + '</a>';
     }).join('');
+    langDropdown.addEventListener('click', function(e) {
+      var a = e.target.closest ? e.target.closest('.lang-option') : null;
+      if (a) {
+        try {
+          localStorage.setItem('radar_lang', a.getAttribute('data-lang'));
+        } catch (err) {}
+      }
+    });
     langBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';

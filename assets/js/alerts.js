@@ -958,6 +958,13 @@ function initHistoryAlertPage(ids) {
 
 function initHomePage() {
   homeMap = createHomeMap();
+  function fixHomeMapSize() {
+    if (homeMap) {
+      homeMap.invalidateSize();
+    }
+  }
+  window.addEventListener('load', fixHomeMapSize);
+  setTimeout(fixHomeMapSize, 500);
   var sidebarSearch = document.getElementById('sidebar-search');
   if (sidebarSearch) {
     sidebarSearch.addEventListener('input', filterSidebarCities);

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>רדאר 📡 - צבע אדום</title>
 <link rel="stylesheet" href="assets/css/leaflet.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>try{var rt=localStorage.getItem('radar_theme');if(rt==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}</script>
 </head>
@@ -33,7 +34,6 @@
         <button class="tab-btn" data-tab="settings" id="tab-btn-settings" type="button">הגדרות</button>
       </div>
       <div id="tab-alerts" class="tab-content active">
-        <input id="sidebar-search" type="text" placeholder="🔍 חיפוש יישוב...">
         <div id="alerts-container">
           <div id="no-alerts">
             <div class="icon">📡</div>
@@ -54,6 +54,17 @@
           <div class="settings-section">
             <div class="settings-label" id="settings-target-label"></div>
             <div class="settings-sublabel" id="settings-target-sub"></div>
+            <div class="settings-subgroup" id="settings-loc-group">
+              <div class="settings-label settings-subhead" id="settings-loc-label"></div>
+              <div class="settings-sublabel" id="settings-loc-sub"></div>
+              <button id="loc-btn" type="button" class="loc-btn"></button>
+              <div id="loc-status" class="loc-status" style="display:none"></div>
+              <div id="loc-choices" class="loc-choices" style="display:none">
+                <button type="button" class="loc-choice-btn" id="loc-choice-city" data-loc-choice="city"></button>
+                <button type="button" class="loc-choice-btn" id="loc-choice-area" data-loc-choice="area"></button>
+                <button type="button" class="loc-choice-btn" id="loc-choice-both" data-loc-choice="both"></button>
+              </div>
+            </div>
             <div class="settings-subgroup">
               <div class="settings-label settings-subhead" id="settings-areas-label"></div>
               <div class="settings-sublabel" id="settings-areas-sub"></div>

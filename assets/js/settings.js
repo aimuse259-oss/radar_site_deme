@@ -315,4 +315,139 @@ function initSettings() {
   });
   renderAreasList();
   renderSelectedCities();
+  initLocationChoice();
+}
+
+var detectedLoc = null;
+
+function pointInPolygon(lat, lng, poly) {
+  var inside = false;
+  for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    var latI = poly[i][0];
+    var lngI = poly[i][1];
+    var latJ = poly[j][0];
+    var lngJ = poly[j][1];
+    if (((lngI > lng) !== (lngJ > lng)) && (lat < (latJ - latI) * (lng - lngI) / (lngJ - lngI) + latI)) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  var r = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return 2 * r * Math.asin(Math.sqrt(a));
+}
+
+function findCityForLocation(lat, lng) {
+  for (var i = 0; i < CIPO_KEYS.length; i++) {
+    var key = CIPO_KEYS[i];
+    var entry = CIPO[key];
+    if (entry && entry.polygon && entry.polygon.length >= 3 && pointInPolygon(lat, lng, entry.polygon)) {
+      return { key: key, nearest: false };
+    }
+  }
+  var best = null;
+  var bestD = Infinity;
+  for (var j = 0; j < CIPO_KEYS.length; j++) {
+    var k = CIPO_KEYS[j];
+    var e = CIPO[k];
+    if (!e || typeof e.latitude !== 'number' || typeof e.longitude !== 'number') {
+      continue;
+    }
+    var d = haversineKm(lat, lng, e.latitude, e.longitude);
+    if (d < bestD) {
+      bestD = d;
+      best = k;
+    }
+  }
+  return best ? { key: best, nearest: true } : null;
+}
+
+function showLocStatus(msg) {
+  var status = document.getElementById('loc-status');
+  if (status) {
+    status.textContent = msg;
+    status.style.display = 'block';
+  }
+}
+
+function initLocationChoice() {
+  var group = document.getElementById('settings-loc-group');
+  var btn = document.getElementById('loc-btn');
+  var choicesEl = document.getElementById('loc-choices');
+  if (!btn) {
+    return;
+  }
+  if (!('geolocation' in navigator)) {
+    if (group) {
+      group.style.display = 'none';
+    }
+    return;
+  }
+  btn.addEventListener('click', function() {
+    var status = document.getElementById('loc-status');
+    if (status) {
+      status.style.display = 'none';
+    }
+    if (choicesEl) {
+      choicesEl.style.display = 'none';
+    }
+    detectedLoc = null;
+    btn.disabled = true;
+    btn.textContent = t.locDetecting;
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      btn.disabled = false;
+      btn.textContent = t.locBtn;
+      var found = findCityForLocation(pos.coords.latitude, pos.coords.longitude);
+      if (!found) {
+        showLocStatus(t.locError);
+        return;
+      }
+      detectedLoc = found;
+      var cityDisplay = getCityName(found.key);
+      var areaDisplay = getAreaName(found.key);
+      if (found.nearest) {
+        showLocStatus(t.locNearest + ' ' + cityDisplay + ' · ' + t.locArea + ': ' + areaDisplay);
+      } else {
+        showLocStatus(t.locCity + ': ' + cityDisplay + ' · ' + t.locArea + ': ' + areaDisplay);
+      }
+      if (choicesEl) {
+        choicesEl.style.display = 'flex';
+      }
+    }, function(err) {
+      btn.disabled = false;
+      btn.textContent = t.locBtn;
+      showLocStatus(err && err.code === 1 ? t.locDenied : t.locError);
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+  });
+  if (choicesEl) {
+    choicesEl.querySelectorAll('.loc-choice-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        if (!detectedLoc) {
+          return;
+        }
+        var mode = b.getAttribute('data-loc-choice');
+        var entry = CIPO[detectedLoc.key];
+        var areaHe = entry && entry.area ? entry.area.hebrew : null;
+        if ((mode === 'city' || mode === 'both') && selectedCities.indexOf(detectedLoc.key) === -1) {
+          selectedCities.push(detectedLoc.key);
+        }
+        if ((mode === 'area' || mode === 'both') && areaHe && selectedAreas.indexOf(areaHe) === -1) {
+          selectedAreas.push(areaHe);
+        }
+        saveSelectionState();
+        renderAreasList();
+        renderSelectedCities();
+        if (typeof applySelectionFilter === 'function') {
+          applySelectionFilter();
+        }
+        showLocStatus(t.locApplied);
+        choicesEl.style.display = 'none';
+      });
+    });
+  }
 }
