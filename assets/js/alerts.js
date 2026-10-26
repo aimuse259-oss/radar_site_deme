@@ -434,10 +434,11 @@ function buildSidebarBlock(docId, doc) {
     var lastTime = last.split(' - ')[1] ? last.split(' - ')[1].trim() : '';
     tsHTML = '<div class="ts-row ts-range">' + formatTs(first) + ' - ' + lastTime + '</div>';
   }
+  var hullDoc = (typeof isHullDoc === 'function') && isHullDoc(doc, uniqueNames);
   var areaHTML = Object.keys(byArea).map(function(area) {
     var chips = byArea[area].map(function(hebrewCity) {
       var display = getCityName(hebrewCity);
-      return '<span class="city-chip" data-city="' + hebrewCity.replace(/"/g, '&quot;') + '" data-doc="' + docId + '">' + display + '</span>';
+      return '<span class="city-chip' + (hullDoc ? ' no-click' : '') + '" data-city="' + hebrewCity.replace(/"/g, '&quot;') + '" data-doc="' + docId + '">' + display + '</span>';
     }).join('');
     return '<div class="alert-area-group"><div class="alert-area-name">' + area + '</div><div class="alert-cities">' + chips + '</div></div>';
   }).join('');
@@ -473,7 +474,7 @@ function buildSidebarBlock(docId, doc) {
     container.insertAdjacentHTML('afterbegin', html);
   }
   var block = document.getElementById('block-' + docId);
-  if (block) {
+  if (block && !hullDoc) {
     block.querySelectorAll('.city-chip').forEach(function(chip) {
       chip.addEventListener('click', function() {
         focusCity(chip.getAttribute('data-city'), docId);

@@ -1277,3 +1277,11 @@ html[dir="ltr"] .history-cat-tab {
   color: var(--muted);
   flex-shrink: 0;
 }
+
+.city-chip.no-click {
+  cursor: default;
+}
+
+.city-chip.no-click:hover {
+  background: var(--chip-bg);
+}
