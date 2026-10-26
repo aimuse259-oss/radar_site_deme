@@ -241,7 +241,12 @@ function initSettings() {
     try {
       soundToggle.checked = localStorage.getItem('radar_sound') === '1';
     } catch (e) {}
-    soundToggle.addEventListener('change', saveToggleState);
+    soundToggle.addEventListener('change', function() {
+      saveToggleState();
+      if (typeof onSoundToggleChanged === 'function') {
+        onSoundToggleChanged(soundToggle.checked);
+      }
+    });
   }
   var notifToggle = document.getElementById('notif-toggle');
   if (notifToggle) {

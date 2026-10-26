@@ -555,7 +555,7 @@ function applySelectionFilter() {
   });
 }
 
-function onDocUpdate(docId, data, changeType) {
+function onDocUpdate(docId, data, changeType, allowFeedback) {
   var lastMs = Date.now();
   var ts = data.last_updated_ts;
   if (ts) {
@@ -581,18 +581,25 @@ function onDocUpdate(docId, data, changeType) {
   scheduleExpiry(docId, lastMs);
   lastAlertDocId = docId;
   startFaviconPulse();
-  sendBrowserNotif(data, docId);
-  triggerAlertFeedback(docId, changeType, qualifying);
+  if (allowFeedback !== false) {
+    sendBrowserNotif(data, docId);
+    triggerAlertFeedback(docId, changeType, qualifying);
+  }
 }
 
+var _listenerPrimed = false;
+
 function startListener() {
+  _listenerPrimed = false;
   var cutoff = new Date(Date.now() - EXPIRE_MS);
   db.collection('alerts_regular').where('last_updated_ts', '>=', cutoff).onSnapshot(function(snapshot) {
+    var primed = _listenerPrimed;
+    _listenerPrimed = true;
     snapshot.docChanges().forEach(function(change) {
       if (change.type === 'removed') {
         removeBlock(change.doc.id);
       } else {
-        onDocUpdate(change.doc.id, change.doc.data(), change.type);
+        onDocUpdate(change.doc.id, change.doc.data(), change.type, primed);
       }
     });
   }, function(err) {

@@ -5,6 +5,7 @@ var _previewAudio = null;
 var _previewTimeout = null;
 var _previewSynthHandle = null;
 var _alertSoundPlaying = false;
+var _pendingAlertSound = false;
 
 var SYNTH_PRESETS = [
   { id: 'calm', synth: 'calm' },
@@ -48,6 +49,15 @@ function getAudioCtx() {
     _audioCtx.resume();
   }
   return _audioCtx;
+}
+
+function audioUnlocked() {
+  try {
+    if (navigator.userActivation) {
+      return navigator.userActivation.hasBeenActive;
+    }
+  } catch (e) {}
+  return true;
 }
 
 function patternRunner(ctx) {
@@ -235,18 +245,40 @@ function playSoundCapped(id) {
     entry = all[0];
   }
   if (entry.synth) {
+    if (!audioUnlocked()) {
+      _pendingAlertSound = true;
+      return false;
+    }
+    var ctx = getAudioCtx();
+    if (ctx.state === 'suspended') {
+      _pendingAlertSound = true;
+      return false;
+    }
     _synthHandle = startSynthAlert(5000, entry.synth === true ? 'default' : entry.synth);
-    return;
+    return true;
+  }
+  if (!audioUnlocked()) {
+    _pendingAlertSound = true;
+    return false;
   }
   var audio = new Audio(entry.file);
   _audioEl = audio;
-  audio.play().catch(function() {});
+  audio.play().catch(function(err) {
+    if (err && err.name === 'NotAllowedError') {
+      _pendingAlertSound = true;
+      _alertSoundPlaying = false;
+      if (_audioEl === audio) {
+        _audioEl = null;
+      }
+    }
+  });
   setTimeout(function() {
     if (_audioEl === audio) {
       audio.pause();
       audio.currentTime = 0;
     }
   }, 5000);
+  return true;
 }
 
 function playAlertSound() {
@@ -258,11 +290,60 @@ function playAlertSound() {
     return;
   }
   _alertSoundPlaying = true;
-  playSoundCapped(getSelectedSoundId());
-  setTimeout(function() {
+  var started = playSoundCapped(getSelectedSoundId());
+  if (started) {
+    _pendingAlertSound = false;
+    setTimeout(function() {
+      _alertSoundPlaying = false;
+    }, 5100);
+  } else {
     _alertSoundPlaying = false;
-  }, 5100);
+  }
 }
+
+function hasActiveAlert() {
+  return !!document.querySelector('#alerts-container .alert-block');
+}
+
+function stopAlertSound() {
+  _pendingAlertSound = false;
+  _alertSoundPlaying = false;
+  if (_audioEl) {
+    _audioEl.pause();
+    _audioEl = null;
+  }
+  if (_synthHandle) {
+    _synthHandle.stop();
+    _synthHandle = null;
+  }
+}
+
+function unlockAudio() {
+  if (_audioCtx && _audioCtx.state === 'suspended') {
+    _audioCtx.resume();
+  }
+  if (_pendingAlertSound) {
+    var toggle = document.getElementById('sound-toggle');
+    if (toggle && toggle.checked && hasActiveAlert()) {
+      _pendingAlertSound = false;
+      playAlertSound();
+    }
+  }
+}
+
+function onSoundToggleChanged(checked) {
+  if (checked) {
+    unlockAudio();
+    if (hasActiveAlert()) {
+      playAlertSound();
+    }
+  } else {
+    stopAlertSound();
+  }
+}
+
+document.addEventListener('pointerdown', unlockAudio);
+document.addEventListener('keydown', unlockAudio);
 
 function stopPreviewSound() {
   if (_previewTimeout) {
