@@ -326,10 +326,14 @@ function createDetailMap(cityNames, cat) {
     for (var k = 0; k < markers.length; k++) {
       (function(m) {
         var detailTypeText = (t.cat[String(cat)] && t.cat[String(cat)].text) || '';
-        var detailTypesLine = detailTypeText ? '<div style="font-size:13px;color:#ccc;">' + detailTypeText + '</div>' : '';
-        var popupContent = '<div style="direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><div style="display:flex;align-items:center;gap:4px;"><b style="font-size:16px;color:#fff;">' + m.displayName + '</b><span class="popup-close-btn" data-city="' + m.name + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#aaa;font-size:16px;line-height:1;">✕</span></div>' + detailTypesLine + '</div>';
+        var detailDir = IS_RTL ? 'rtl' : 'ltr';
+        var detailAlign = IS_RTL ? 'right' : 'left';
+        var detailTypesLine = detailTypeText ? '<div dir="' + detailDir + '" style="font-size:14px;color:#ddd;text-align:' + detailAlign + ';margin-top:3px;">' + detailTypeText + '</div>' : '';
+        var detailDot = '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:' + catColor(cat) + ';flex:none;"></span>';
+        var popupContent = '<div dir="' + detailDir + '" style="text-align:' + detailAlign + ';"><div style="display:flex;align-items:center;gap:8px;">' + detailDot + '<b style="font-size:18px;color:#fff;">' + m.displayName + '</b><span class="popup-close-btn" data-city="' + m.name + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#bbb;font-size:18px;line-height:1;padding:2px 4px;">✕</span></div>' + detailTypesLine + '</div>';
         var marker = L.marker([m.lat, m.lng], { icon: makeIcon(color) }).addTo(map).bindPopup(popupContent, { closeButton: false });
         marker.on('popupopen', function() {
+          _detailPopupOpen = true;
           var popupEl = marker.getPopup().getElement();
           if (popupEl) {
             popupEl.querySelectorAll('.popup-close-btn').forEach(function(btn) {
@@ -346,11 +350,17 @@ function createDetailMap(cityNames, cat) {
           }
         });
         marker.on('popupclose', function() {
+          _detailPopupOpen = false;
           if (_detailActiveLi && _detailActiveMarker === marker) {
             _detailActiveLi.classList.remove('active-city');
             _detailActiveLi = null;
             _detailActiveMarker = null;
           }
+          setTimeout(function() {
+            if (!_detailPopupOpen) {
+              fitAll();
+            }
+          }, 100);
         });
         bounds.push([m.lat, m.lng]);
         markersByCity[m.name] = { lat: m.lat, lng: m.lng, marker: marker };
@@ -362,6 +372,7 @@ function createDetailMap(cityNames, cat) {
   }
   var _detailActiveLi = null;
   var _detailActiveMarker = null;
+  var _detailPopupOpen = false;
   function fitAll() {
     if (!map) {
       return;

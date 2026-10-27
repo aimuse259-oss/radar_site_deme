@@ -232,9 +232,14 @@ function triggerAlertFeedback(docId, changeType, qualifying) {
 }
 
 function makeHomePopupContent(displayName, hebrewName, docId, typesText) {
-  var xBtn = '<span class="popup-close-btn" data-city="' + hebrewName.replace(/"/g, '&quot;') + '" data-doc="' + docId + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#aaa;font-size:16px;" title="סגור">✕</span>';
-  var typesLine = typesText ? '<div style="font-size:13px;color:#ccc;">' + typesText + '</div>' : '';
-  return '<div style="direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><div style="display:flex;align-items:center;gap:4px;"><b style="font-size:16px;color:#fff;">' + displayName + '</b>' + xBtn + '</div>' + typesLine + '</div>';
+  var doc = activeAlerts[docId];
+  var color = catColor(doc ? doc.cat : '1');
+  var dir = IS_RTL ? 'rtl' : 'ltr';
+  var align = IS_RTL ? 'right' : 'left';
+  var xBtn = '<span class="popup-close-btn" data-city="' + hebrewName.replace(/"/g, '&quot;') + '" data-doc="' + docId + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#bbb;font-size:18px;padding:2px 4px;" title="סגור">✕</span>';
+  var dot = '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:' + color + ';flex:none;"></span>';
+  var typesLine = typesText ? '<div dir="' + dir + '" style="font-size:14px;color:#ddd;text-align:' + align + ';margin-top:3px;">' + typesText + '</div>' : '';
+  return '<div dir="' + dir + '" style="text-align:' + align + ';"><div style="display:flex;align-items:center;gap:8px;">' + dot + '<b style="font-size:18px;color:#fff;">' + displayName + '</b>' + xBtn + '</div>' + typesLine + '</div>';
 }
 
 function cityAlertTypes(hebrewName) {
@@ -292,7 +297,12 @@ function bindHomePopupCloseButtons(container, docId) {
   });
 }
 
+var _homePopupOpen = false;
+var _openPopupDoc = null;
+var _openPopupCity = null;
+
 function renderMapLayers(docId, doc) {
+  var reopenCity = (_openPopupDoc === docId) ? _openPopupCity : null;
   removeMapLayers(docId);
   var allCities = extractCities(doc);
   var filteredNames = qualifyingCities(allCities);
@@ -306,8 +316,11 @@ function renderMapLayers(docId, doc) {
   mapLayers[docId] = built;
   built.markers.forEach(function(m) {
     var popupContent = makeHomePopupContent(m.displayName, m.name, docId, cityAlertTypes(m.name).join(', '));
-    m.marker.bindPopup(popupContent, { closeButton: false, autoPanPaddingTopLeft: L.point(10, 70) });
+    m.marker.bindPopup(popupContent, { closeButton: false });
     m.marker.on('popupopen', function() {
+      _homePopupOpen = true;
+      _openPopupDoc = docId;
+      _openPopupCity = m.name;
       m.marker.getPopup().setContent(makeHomePopupContent(m.displayName, m.name, docId, cityAlertTypes(m.name).join(', ')));
       var popupEl = m.marker.getPopup().getElement();
       if (popupEl) {
@@ -315,6 +328,9 @@ function renderMapLayers(docId, doc) {
       }
     });
     m.marker.on('popupclose', function() {
+      _homePopupOpen = false;
+      _openPopupDoc = null;
+      _openPopupCity = null;
       if (_activeChips[docId] === m.name && _activeMarkers[docId] === m.marker) {
         var chip = document.querySelector('#alerts-container .city-chip[data-doc="' + docId + '"][data-city="' + m.name.replace(/"/g, '\\"') + '"]');
         if (chip) {
@@ -325,8 +341,20 @@ function renderMapLayers(docId, doc) {
         _activeChips[docId] = null;
         _activeMarkers[docId] = null;
       }
+      setTimeout(function() {
+        if (!_homePopupOpen) {
+          zoomToAlert(docId);
+        }
+      }, 100);
     });
   });
+  if (reopenCity) {
+    built.markers.forEach(function(m) {
+      if (m.name === reopenCity) {
+        m.marker.openPopup();
+      }
+    });
+  }
 }
 
 function removeMapLayers(docId) {
@@ -357,7 +385,6 @@ function zoomToAlert(docId) {
     } catch (e) {}
   });
   if (bounds.isValid()) {
-    homeMap.closePopup();
     homeMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 13, animate: true });
   }
 }
