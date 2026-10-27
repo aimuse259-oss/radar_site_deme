@@ -438,7 +438,9 @@ function createDetailMap(cityNames, cat) {
     document.getElementById('alert-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
     map.setView([entry.lat, entry.lng], 13, { animate: true });
     _detailActiveMarker = entry.marker;
-    entry.marker.openPopup();
+    if (!entry.marker.isPopupOpen()) {
+      entry.marker.openPopup();
+    }
   }
   function bindCityList() {
     document.querySelectorAll('#alert-content li').forEach(function(li) {
