@@ -325,7 +325,9 @@ function createDetailMap(cityNames, cat) {
     }
     for (var k = 0; k < markers.length; k++) {
       (function(m) {
-        var popupContent = '<div style="display:flex;align-items:center;gap:4px;direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><b>' + m.displayName + '</b><span class="popup-close-btn" data-city="' + m.name + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#888;font-size:14px;line-height:1;">✕</span></div>';
+        var detailTypeText = (t.cat[String(cat)] && t.cat[String(cat)].text) || '';
+        var detailTypesLine = detailTypeText ? '<div style="font-size:12px;color:#555;">' + detailTypeText + '</div>' : '';
+        var popupContent = '<div style="direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><div style="display:flex;align-items:center;gap:4px;"><b>' + m.displayName + '</b><span class="popup-close-btn" data-city="' + m.name + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#888;font-size:14px;line-height:1;">✕</span></div>' + detailTypesLine + '</div>';
         var marker = L.marker([m.lat, m.lng], { icon: makeIcon(color) }).addTo(map).bindPopup(popupContent, { closeButton: false });
         marker.on('popupopen', function() {
           var popupEl = marker.getPopup().getElement();
