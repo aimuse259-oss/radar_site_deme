@@ -204,7 +204,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 650;
+  z-index: 550;
   pointer-events: none;
   display: flex;
   flex-direction: row;
