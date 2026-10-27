@@ -232,9 +232,9 @@ function triggerAlertFeedback(docId, changeType, qualifying) {
 }
 
 function makeHomePopupContent(displayName, hebrewName, docId, typesText) {
-  var xBtn = '<span class="popup-close-btn" data-city="' + hebrewName.replace(/"/g, '&quot;') + '" data-doc="' + docId + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#888;font-size:14px;" title="סגור">✕</span>';
-  var typesLine = typesText ? '<div style="font-size:12px;color:#555;">' + typesText + '</div>' : '';
-  return '<div style="direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><div style="display:flex;align-items:center;gap:4px;"><b>' + displayName + '</b>' + xBtn + '</div>' + typesLine + '</div>';
+  var xBtn = '<span class="popup-close-btn" data-city="' + hebrewName.replace(/"/g, '&quot;') + '" data-doc="' + docId + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#aaa;font-size:16px;" title="סגור">✕</span>';
+  var typesLine = typesText ? '<div style="font-size:13px;color:#ccc;">' + typesText + '</div>' : '';
+  return '<div style="direction:' + (IS_RTL ? 'rtl' : 'ltr') + '"><div style="display:flex;align-items:center;gap:4px;"><b style="font-size:16px;color:#fff;">' + displayName + '</b>' + xBtn + '</div>' + typesLine + '</div>';
 }
 
 function cityAlertTypes(hebrewName) {
@@ -306,7 +306,7 @@ function renderMapLayers(docId, doc) {
   mapLayers[docId] = built;
   built.markers.forEach(function(m) {
     var popupContent = makeHomePopupContent(m.displayName, m.name, docId, cityAlertTypes(m.name).join(', '));
-    m.marker.bindPopup(popupContent, { closeButton: false });
+    m.marker.bindPopup(popupContent, { closeButton: false, autoPanPaddingTopLeft: L.point(10, 70) });
     m.marker.on('popupopen', function() {
       m.marker.getPopup().setContent(makeHomePopupContent(m.displayName, m.name, docId, cityAlertTypes(m.name).join(', ')));
       var popupEl = m.marker.getPopup().getElement();
@@ -357,6 +357,7 @@ function zoomToAlert(docId) {
     } catch (e) {}
   });
   if (bounds.isValid()) {
+    homeMap.closePopup();
     homeMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 13, animate: true });
   }
 }
@@ -364,6 +365,7 @@ function zoomToAlert(docId) {
 function focusCity(hebrewName, docId) {
   var chip = document.querySelector('#alerts-container .city-chip[data-doc="' + docId + '"][data-city="' + hebrewName.replace(/"/g, '\\"') + '"]');
   var isAlreadyActive = _activeChips[docId] === hebrewName;
+  homeMap.closePopup();
   Object.keys(_activeChips).forEach(function(dId) {
     if (_activeChips[dId]) {
       var prevChip = document.querySelector('#alerts-container .city-chip[data-doc="' + dId + '"][data-city="' + _activeChips[dId].replace(/"/g, '\\"') + '"]');
