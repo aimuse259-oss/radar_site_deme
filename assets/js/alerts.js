@@ -317,6 +317,9 @@ function renderMapLayers(docId, doc) {
   built.markers.forEach(function(m) {
     var popupContent = makeHomePopupContent(m.displayName, m.name, docId, cityAlertTypes(m.name).join(', '));
     m.marker.bindPopup(popupContent, { closeButton: false });
+    m.marker.on('click', function() {
+      focusCity(m.name, docId);
+    });
     m.marker.on('popupopen', function() {
       _homePopupOpen = true;
       _openPopupDoc = docId;
@@ -629,7 +632,9 @@ function onDocUpdate(docId, data, changeType, allowFeedback) {
   activeAlerts[docId] = data;
   if (CIPO_KEYS.length) {
     renderMapLayers(docId, data);
-    zoomToAlert(docId);
+    if (!_homePopupOpen) {
+      zoomToAlert(docId);
+    }
   }
   buildSidebarBlock(docId, data);
   scheduleExpiry(docId, lastMs);

@@ -332,6 +332,9 @@ function createDetailMap(cityNames, cat) {
         var detailDot = '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:' + catColor(cat) + ';flex:none;"></span>';
         var popupContent = '<div dir="' + detailDir + '" style="text-align:' + detailAlign + ';"><div style="display:flex;align-items:center;gap:8px;">' + detailDot + '<b style="font-size:18px;color:#fff;">' + m.displayName + '</b><span class="popup-close-btn" data-city="' + m.name + '" style="cursor:pointer;margin-' + (IS_RTL ? 'right' : 'left') + ':8px;font-weight:bold;color:#bbb;font-size:18px;line-height:1;padding:2px 4px;">✕</span></div>' + detailTypesLine + '</div>';
         var marker = L.marker([m.lat, m.lng], { icon: makeIcon(color) }).addTo(map).bindPopup(popupContent, { closeButton: false });
+        marker.on('click', function() {
+          focusCity(m.name);
+        });
         marker.on('popupopen', function() {
           _detailPopupOpen = true;
           var popupEl = marker.getPopup().getElement();
