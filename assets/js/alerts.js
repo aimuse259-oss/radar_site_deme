@@ -1079,7 +1079,5 @@ function initHomePage() {
       registerServiceWorker();
     }
   } catch (e) {}
-  updateClock();
-  setInterval(updateClock, 1000);
   startListener();
 }

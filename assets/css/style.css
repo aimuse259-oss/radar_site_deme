@@ -200,42 +200,45 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 
 #clock-bar {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 550;
-  pointer-events: none;
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
-  padding: 8px 18px;
+  flex-shrink: 0;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(13, 17, 23, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
 }
 
 #clock-date {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--muted);
   margin-bottom: 0;
   overflow-wrap: break-word;
 }
 
 #clock-time {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   font-variant-numeric: tabular-nums;
   letter-spacing: 1px;
   line-height: 1.2;
+}
+
+@media (max-width: 700px) {
+  #site-header {
+    flex-wrap: wrap;
+  }
+  #clock-bar {
+    order: 99;
+    flex-basis: 100%;
+    justify-content: center;
+  }
 }
 
 #sidebar-tabs {

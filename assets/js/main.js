@@ -151,6 +151,11 @@ function applySavedToggles() {
   applyStaticTranslations();
   applySavedToggles();
 
+  if (typeof updateClock === 'function') {
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
   var params = new URLSearchParams(window.location.search);
   var alertId = params.get('id');
   var histIds = params.get('histIds');
