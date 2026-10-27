@@ -337,6 +337,7 @@ function createDetailMap(cityNames, cat) {
         });
         marker.on('popupopen', function() {
           _detailPopupOpen = true;
+          marker.getPopup().setContent(popupContent);
           var popupEl = marker.getPopup().getElement();
           if (popupEl) {
             popupEl.querySelectorAll('.popup-close-btn').forEach(function(btn) {

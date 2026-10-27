@@ -19,7 +19,15 @@ function extractCities(doc) {
 }
 
 function catMetaFor(doc) {
-  return t.cat[String(doc.cat)] || { emoji: '🚨', text: getCat10Title(doc) || doc.title || '', instruction: '' };
+  var m = t.cat[String(doc.cat)];
+  if (m) {
+    return m;
+  }
+  var meta = { emoji: '🚨', text: getCat10Title(doc) || doc.title || '', instruction: '' };
+  if (String(doc.cat) === '10e') {
+    meta.emoji = '✅';
+  }
+  return meta;
 }
 
 function formatTs(raw) {
@@ -851,6 +859,9 @@ function loadHistory() {
     container.innerHTML = merged.map(function(group) {
       var color = catColor(group.cat);
       var catMeta = t.cat[group.cat] || { emoji: '🚨', text: getCat10Title(group) || group.title };
+      if (String(group.cat) === '10e') {
+        catMeta.emoji = '✅';
+      }
       var timeStr = formatHistoryTime(group.uniqueTimes);
       var citiesStr = group.cities.map(function(n) {
         return getCityName(n);
