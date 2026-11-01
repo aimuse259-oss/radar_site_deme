@@ -47,10 +47,6 @@ function applyStaticTranslations() {
   setText('readout-sub', t.readoutSub);
   setText('platforms-label', t.platforms);
   setPlaceholder('alert-search', t.searchPlaceholder);
-  var settingsCredits = document.getElementById('settings-credits');
-  if (settingsCredits) {
-    settingsCredits.innerHTML = creditsHTML();
-  }
   setText('legal-label', t.legalTitle);
   var legalContent = document.getElementById('legal-content');
   if (legalContent) {

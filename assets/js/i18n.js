@@ -99,6 +99,7 @@ var T = {
     legalTitle: 'משפטי',
     tabPrivacy: 'מדיניות הפרטיות',
     tabTerms: 'תנאי השימוש',
+    tabCredits: 'קרדיטים',
     privacyPoints: [
       'האתר אינו אוסף מידע אישי ואינו דורש הרשמה.',
       'המיקום שלך (אם אישרת) משמש רק במכשיר שלך לאיתור העיר או המרחב, ואינו נשלח לשרתים שלנו.',
@@ -183,6 +184,7 @@ var T = {
     legalTitle: 'Legal',
     tabPrivacy: 'Privacy Policy',
     tabTerms: 'Terms of Use',
+    tabCredits: 'Credits',
     privacyPoints: [
       'The site does not collect personal information and does not require registration.',
       'Your location (if you allow it) is used only on your device to find your city or area, and is never sent to our servers.',
@@ -267,6 +269,7 @@ var T = {
     legalTitle: 'Правовая информация',
     tabPrivacy: 'Политика конфиденциальности',
     tabTerms: 'Условия использования',
+    tabCredits: 'Благодарности',
     privacyPoints: [
       'Сайт не собирает личную информацию и не требует регистрации.',
       'Ваше местоположение (если вы разрешили) используется только на вашем устройстве для определения города или региона и никогда не отправляется на наши серверы.',
@@ -351,6 +354,7 @@ var T = {
     legalTitle: 'قانوني',
     tabPrivacy: 'سياسة الخصوصية',
     tabTerms: 'شروط الاستخدام',
+    tabCredits: 'اعتمادات',
     privacyPoints: [
       'لا يجمع الموقع معلومات شخصية ولا يتطلب التسجيل.',
       'موقعك (إذا سمحت بذلك) يُستخدم فقط على جهازك لتحديد مدينتك أو منطقتك، ولا يُرسل أبداً إلى خوادمنا.',
@@ -451,9 +455,11 @@ function legalHTML() {
   return '<div class="legal-tabs">' +
     '<button type="button" class="legal-tab-btn active" data-legal="privacy">' + t.tabPrivacy + '</button>' +
     '<button type="button" class="legal-tab-btn" data-legal="terms">' + t.tabTerms + '</button>' +
+    '<button type="button" class="legal-tab-btn" data-legal="credits">' + t.tabCredits + '</button>' +
     '</div>' +
     '<div class="legal-pane active" id="legal-privacy">' + legalPointsHTML(t.privacyPoints) + '</div>' +
-    '<div class="legal-pane" id="legal-terms">' + legalPointsHTML(t.termsPoints) + '</div>';
+    '<div class="legal-pane" id="legal-terms">' + legalPointsHTML(t.termsPoints) + '</div>' +
+    '<div class="legal-pane" id="legal-credits">' + creditsHTML() + '</div>';
 }
 
 function initLegalTabs() {
