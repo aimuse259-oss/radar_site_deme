@@ -167,6 +167,9 @@ function sendBrowserNotif(doc, docId) {
   if (!toggle || !toggle.checked) {
     return;
   }
+  if (localStorage.getItem('radar_push') === '1') {
+    return;
+  }
   if (!('Notification' in window) || Notification.permission !== 'granted') {
     return;
   }
