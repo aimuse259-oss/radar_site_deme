@@ -73,6 +73,11 @@ function applySavedToggles() {
       pushToggle.checked = localStorage.getItem('radar_push') === '1';
       pushToggle.addEventListener('change', function() {
         if (pushToggle.checked) {
+          if (isIOS() && !isPwaInstalled()) {
+            pushToggle.checked = false;
+            alert(t.pushInstallFirst || 'Please install the app to your home screen first (Share → Add to Home Screen), then enable push.');
+            return;
+          }
           ensurePushSubscribed().then(function(ok) {
             if (!ok) {
               pushToggle.checked = false;
@@ -236,6 +241,20 @@ function applySavedToggles() {
   }
 })();
 var PUSH_VAPID_KEY = 'BOhLvGS5XkAE78IsuLQAEv4iyvQ-mwBHCVJ9sIg8qwzK6DanSSke1aIujTPNL3uOlpB1sMdCvwuIzUn9UJPZR7Q';
+
+function isPwaInstalled() {
+  if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    return true;
+  }
+  if (window.navigator && window.navigator.standalone === true) {
+    return true;
+  }
+  return false;
+}
+
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
 
 async function ensurePushSubscribed() {
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
