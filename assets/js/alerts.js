@@ -1085,7 +1085,7 @@ function initHomePage() {
 }
 
 function shareAlertData(docId, isHistory, ids) {
-  var t = I18N[LANG] || I18N.he;
+  var tt = (typeof T !== "undefined" && T[LANG]) || t;
   var url = location.origin + location.pathname;
   var text = '';
   if (isHistory) {
@@ -1112,23 +1112,23 @@ function shareAlertData(docId, isHistory, ids) {
       }
     }
   }
-  return { title: t.shareTitle || 'Share', text: text, url: url };
+  return { title: tt.shareTitle || 'Share', text: text, url: url };
 }
 
 function openShareMenu(btn, data) {
   closeShareMenu();
-  var t = I18N[LANG] || I18N.he;
+  var tt = (typeof T !== "undefined" && T[LANG]) || t;
   var menu = document.createElement('div');
   menu.className = 'share-menu';
   menu.innerHTML =
-    '<button data-share="whatsapp">' + (t.shareWhatsApp || 'WhatsApp') + '</button>' +
-    '<button data-share="telegram">' + (t.shareTelegram || 'Telegram') + '</button>' +
-    '<button data-share="copy">' + (t.shareCopyLink || 'Copy link') + '</button>';
+    '<button data-share="whatsapp">' + (tt.shareWhatsApp || 'WhatsApp') + '</button>' +
+    '<button data-share="telegram">' + (tt.shareTelegram || 'Telegram') + '</button>' +
+    '<button data-share="copy">' + (tt.shareCopyLink || 'Copy link') + '</button>';
   document.body.appendChild(menu);
   var rect = btn.getBoundingClientRect();
   menu.style.position = 'fixed';
   menu.style.top = (rect.bottom + 6 + window.scrollY) + 'px';
-  var isRTL = (I18N[LANG] || I18N.he).dir === 'rtl';
+  var isRTL = tt.dir === 'rtl';
   if (isRTL) {
     menu.style.right = (window.innerWidth - rect.right) + 'px';
   } else {
@@ -1161,11 +1161,11 @@ function closeShareMenu() {
 }
 
 function copyShareLink(url, btn) {
-  var t = I18N[LANG] || I18N.he;
+  var tt = (typeof T !== "undefined" && T[LANG]) || t;
   function done() {
     var tip = document.createElement('div');
     tip.className = 'share-toast';
-    tip.textContent = t.shareCopied || 'Copied';
+    tip.textContent = tt.shareCopied || 'Copied';
     document.body.appendChild(tip);
     setTimeout(function() { tip.remove(); }, 1800);
   }
