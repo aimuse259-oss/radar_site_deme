@@ -499,7 +499,7 @@ function legalHTML() {
     '<div class="legal-pane active" id="legal-privacy">' + legalPointsHTML(t.privacyPoints) + '</div>' +
     '<div class="legal-pane" id="legal-terms">' + legalPointsHTML(t.termsPoints) + '</div>' +
     '<div class="legal-pane" id="legal-credits">' + creditsHTML() + '</div>' +
-    '<div class="legal-version">v20</div>';
+    '<div class="legal-version">v23</div>';
 }
 
 function initLegalTabs() {
