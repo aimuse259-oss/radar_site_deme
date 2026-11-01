@@ -96,6 +96,23 @@ var T = {
     creditData: 'נתוני ההתרעות באדיבות',
     creditHebcal: 'התאריך העברי באתר מופעל באמצעות Hebcal.com (רישיון Creative Commons Attribution 4.0)',
     disclaimer: 'אתר זה אינו ערוץ רשמי של פיקוד העורף, ואין לראות בו אמצעי בטיחות בשעת חירום. המידע כאן הוא לידיעה בלבד, ואינו מחליף הנחיה רשמית של פיקוד העורף או של גורם מוסמך אחר.',
+    legalTitle: 'משפטי',
+    tabPrivacy: 'מדיניות הפרטיות',
+    tabTerms: 'תנאי השימוש',
+    privacyPoints: [
+      'האתר אינו אוסף מידע אישי ואינו דורש הרשמה.',
+      'המיקום שלך (אם אישרת) משמש רק במכשיר שלך לאיתור העיר או המרחב, ואינו נשלח לשרתים שלנו.',
+      'ההגדרות שלך (שפה, ערכת נושא, אזורים נבחרים) נשמרות רק בדפדפן שלך.',
+      'איננו משתפים מידע כלשהו עם צדדים שלישיים.',
+      'שירותים חיצוניים (Firebase להתרעות, Hebcal לתאריך עברי) פועלים לפי מדיניות הפרטיות שלהם.'
+    ],
+    termsPoints: [
+      'האתר נועד לידיעה בלבד ואינו ערוץ רשמי של פיקוד העורף. אין לראות בו אמצעי בטיחות בשעת חירום.',
+      'אין להעתיק, לשכפל או להפיץ את תוכן האתר, עיצובו או הקוד שלו ללא אישור בכתב.',
+      'הקלטות האודיו באתר (הקראת שמות היישובים) הן קניין האתר — אין להעתיק, להוריד או לעשות בהן שימוש כלשהו ללא אישור.',
+      'בעלי האתר אינם אחראים לעיכובים, שגיאות או התרעות שלא התקבלו.',
+      'השימוש באתר מהווה הסכמה לתנאים אלה.'
+    ],
     cat: {
       "1":  { emoji: '🚨', text: 'צבע אדום', instruction: 'היכנסו למרחב המוגן.' },
       "5":  { emoji: '🌊', text: 'חשש לצונאמי', instruction: 'יש להתרחק קילומטר אחד לפחות מהחוף.' },
@@ -163,6 +180,23 @@ var T = {
     creditData: 'Alert data courtesy of',
     creditHebcal: 'The Hebrew date on this site is powered by Hebcal.com (Creative Commons Attribution 4.0 license)',
     disclaimer: 'This site is not an official Home Front Command channel, and it should not be treated as a safety measure in an emergency. The information here is for general knowledge only and does not replace official guidance from the Home Front Command or any other authorized source.',
+    legalTitle: 'Legal',
+    tabPrivacy: 'Privacy Policy',
+    tabTerms: 'Terms of Use',
+    privacyPoints: [
+      'The site does not collect personal information and does not require registration.',
+      'Your location (if you allow it) is used only on your device to find your city or area, and is never sent to our servers.',
+      'Your settings (language, theme, selected areas) are stored only in your browser.',
+      'We do not share any information with third parties.',
+      'External services (Firebase for alerts, Hebcal for the Hebrew date) operate under their own privacy policies.'
+    ],
+    termsPoints: [
+      'This site is for informational purposes only and is not an official Home Front Command channel. It must not be treated as a safety measure in an emergency.',
+      'Do not copy, reproduce, or distribute the site\u2019s content, design, or code without written permission.',
+      'The site\u2019s audio recordings (locality name readouts) are the property of the site \u2014 do not copy, download, or use them in any way without permission.',
+      'The site owners are not responsible for delays, errors, or missed alerts.',
+      'Use of the site constitutes agreement to these terms.'
+    ],
     cat: {
       "1":  { emoji: '🚨', text: 'Red Alert', instruction: 'Enter the protected space.' },
       "5":  { emoji: '🌊', text: 'Tsunami Warning', instruction: 'Move at least one kilometer from the coast.' },
@@ -230,6 +264,23 @@ var T = {
     creditData: 'Данные оповещений предоставлены',
     creditHebcal: 'Еврейская дата на сайте предоставлена Hebcal.com (лицензия Creative Commons Attribution 4.0)',
     disclaimer: 'Этот сайт не является официальным каналом Командования тыла, и его нельзя считать средством безопасности в чрезвычайной ситуации. Информация здесь приводится только для сведения и не заменяет официальные указания Командования тыла или другого уполномоченного источника.',
+    legalTitle: 'Правовая информация',
+    tabPrivacy: 'Политика конфиденциальности',
+    tabTerms: 'Условия использования',
+    privacyPoints: [
+      'Сайт не собирает личную информацию и не требует регистрации.',
+      'Ваше местоположение (если вы разрешили) используется только на вашем устройстве для определения города или региона и никогда не отправляется на наши серверы.',
+      'Ваши настройки (язык, тема, выбранные районы) хранятся только в вашем браузере.',
+      'Мы не передаём никакую информацию третьим лицам.',
+      'Внешние сервисы (Firebase для оповещений, Hebcal для еврейской даты) действуют в соответствии со своими политиками конфиденциальности.'
+    ],
+    termsPoints: [
+      'Сайт предназначен только для информации и не является официальным каналом Командования тыла. Его нельзя считать средством безопасности в чрезвычайной ситуации.',
+      'Запрещается копировать, воспроизводить или распространять содержимое, дизайн или код сайта без письменного разрешения.',
+      'Аудиозаписи сайта (озвучивание названий населённых пунктов) являются собственностью сайта — запрещается копировать, скачивать или использовать их каким-либо образом без разрешения.',
+      'Владельцы сайта не несут ответственности за задержки, ошибки или пропущенные оповещения.',
+      'Использование сайта означает согласие с настоящими условиями.'
+    ],
     cat: {
       "1":  { emoji: '🚨', text: 'Цева Адом', instruction: 'Войдите в укрытие.' },
       "5":  { emoji: '🌊', text: 'Предупреждение о цунами', instruction: 'Отойдите не менее чем на один километр от берега.' },
@@ -297,6 +348,23 @@ var T = {
     creditData: 'بيانات التنبيهات مقدمة من',
     creditHebcal: 'التاريخ العبري في الموقع مقدم من Hebcal.com (رخصة المشاع الإبداعي نسب المصنف 4.0)',
     disclaimer: 'هذا الموقع ليس قناة رسمية لقيادة الجبهة الداخلية، ولا ينبغي اعتباره وسيلة أمان في حالات الطوارئ. المعلومات هنا للاطلاع العام فقط ولا تحل محل التوجيهات الرسمية من قيادة الجبهة الداخلية أو أي مصدر مخوّل آخر.',
+    legalTitle: 'قانوني',
+    tabPrivacy: 'سياسة الخصوصية',
+    tabTerms: 'شروط الاستخدام',
+    privacyPoints: [
+      'لا يجمع الموقع معلومات شخصية ولا يتطلب التسجيل.',
+      'موقعك (إذا سمحت بذلك) يُستخدم فقط على جهازك لتحديد مدينتك أو منطقتك، ولا يُرسل أبداً إلى خوادمنا.',
+      'إعداداتك (اللغة، السمة، المناطق المختارة) تُحفظ في متصفحك فقط.',
+      'لا نشارك أي معلومات مع أطراف ثالثة.',
+      'الخدمات الخارجية (Firebase للتنبيهات، Hebcal للتاريخ العبري) تعمل وفق سياسات الخصوصية الخاصة بها.'
+    ],
+    termsPoints: [
+      'هذا الموقع للاطلاع فقط وليس قناة رسمية لقيادة الجبهة الداخلية. لا يجوز اعتباره وسيلة أمان في حالات الطوارئ.',
+      'يُمنع نسخ محتوى الموقع أو تصميمه أو رمزه البرمجي أو إعادة إنتاجه أو توزيعه دون إذن كتابي.',
+      'التسجيلات الصوتية في الموقع (قراءة أسماء البلدات) هي ملك للموقع — يُمنع نسخها أو تنزيلها أو استخدامها بأي شكل دون إذن.',
+      'مالكو الموقع غير مسؤولين عن التأخير أو الأخطاء أو التنبيهات الفائتة.',
+      'استخدام الموقع يُعد موافقة على هذه الشروط.'
+    ],
     cat: {
       "1":  { emoji: '🚨', text: 'اللون الأحمر', instruction: 'ادخل إلى المكان المحمي.' },
       "5":  { emoji: '🌊', text: 'خطر تسونامي', instruction: 'ابتعد كيلومتراً عن الشاطئ على الأقل.' },
@@ -371,4 +439,39 @@ function creditsHTML() {
     '<div class="credits-line">' + t.creditData + ' ' + hfcLink + '</div>' +
     (LANG === 'he' ? '<div class="credits-line">' + hebcalLine + '</div>' : '') +
     '<div class="credits-disclaimer">' + t.disclaimer + '</div>';
+}
+
+function legalPointsHTML(points) {
+  return '<ol class="legal-list">' + points.map(function(p) {
+    return '<li>' + p.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</li>';
+  }).join('') + '</ol>';
+}
+
+function legalHTML() {
+  return '<div class="legal-tabs">' +
+    '<button type="button" class="legal-tab-btn active" data-legal="privacy">' + t.tabPrivacy + '</button>' +
+    '<button type="button" class="legal-tab-btn" data-legal="terms">' + t.tabTerms + '</button>' +
+    '</div>' +
+    '<div class="legal-pane active" id="legal-privacy">' + legalPointsHTML(t.privacyPoints) + '</div>' +
+    '<div class="legal-pane" id="legal-terms">' + legalPointsHTML(t.termsPoints) + '</div>';
+}
+
+function initLegalTabs() {
+  var btns = document.querySelectorAll('.legal-tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() {
+      for (var j = 0; j < btns.length; j++) {
+        btns[j].classList.remove('active');
+      }
+      this.classList.add('active');
+      var panes = document.querySelectorAll('.legal-pane');
+      for (var k = 0; k < panes.length; k++) {
+        panes[k].classList.remove('active');
+      }
+      var target = document.getElementById('legal-' + this.getAttribute('data-legal'));
+      if (target) {
+        target.classList.add('active');
+      }
+    });
+  }
 }

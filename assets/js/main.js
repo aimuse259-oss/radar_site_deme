@@ -51,6 +51,12 @@ function applyStaticTranslations() {
   if (settingsCredits) {
     settingsCredits.innerHTML = creditsHTML();
   }
+  setText('legal-label', t.legalTitle);
+  var legalContent = document.getElementById('legal-content');
+  if (legalContent) {
+    legalContent.innerHTML = legalHTML();
+    initLegalTabs();
+  }
   document.title = t.siteTitle;
 }
 
