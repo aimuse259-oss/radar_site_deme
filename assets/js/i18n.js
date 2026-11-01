@@ -441,8 +441,7 @@ function creditsHTML() {
   var hebcalLine = t.creditHebcal.replace('Hebcal.com', hebcalLink);
   return '<div class="credits-line">' + t.creditAreas + ' ' + tzofarLink + '</div>' +
     '<div class="credits-line">' + t.creditData + ' ' + hfcLink + '</div>' +
-    (LANG === 'he' ? '<div class="credits-line">' + hebcalLine + '</div>' : '') +
-    '<div class="credits-disclaimer">' + t.disclaimer + '</div>';
+    (LANG === 'he' ? '<div class="credits-line">' + hebcalLine + '</div>' : '');
 }
 
 function legalPointsHTML(points) {
