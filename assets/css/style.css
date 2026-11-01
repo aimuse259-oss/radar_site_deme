@@ -114,7 +114,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   align-items: center;
 }
 
-#lang-btn, #theme-btn {
+#lang-btn, #theme-btn, #contact-btn {
   background: none;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -129,7 +129,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   justify-content: center;
 }
 
-#lang-btn:hover, #theme-btn:hover {
+#lang-btn:hover, #theme-btn:hover, #contact-btn:hover {
   background: var(--hover-bg);
 }
 
@@ -869,14 +869,6 @@ html[dir="ltr"] .alert-cat-tab {
 
 .legal-list li {
   margin-bottom: 6px;
-}
-
-#contact-btn {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 4px 8px;
 }
 
 #contact-modal {
