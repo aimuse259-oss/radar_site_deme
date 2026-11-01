@@ -515,6 +515,7 @@ function buildSidebarBlock(docId, doc) {
     '<div class="alert-type">' + catMeta.text + '</div>' +
     '<div class="alert-count">' + uniqueNames.length + ' ' + t.cities + '</div>' +
     '</div>' +
+    '<button class="share-btn" data-share-doc="' + docId + '" aria-label="share">📤</button>' +
     '</div>' +
     '<div class="alert-body">' +
     areaHTML +
@@ -873,6 +874,7 @@ function loadHistory() {
         '<div class="history-block-header">' +
         '<div class="history-dot" style="background:' + color + '"></div>' +
         '<div class="history-type">' + catMeta.text + '</div>' +
+        '<button class="share-btn" data-share-history="1" data-share-ids="' + idsAttr + '" aria-label="share">📤</button>' +
         '</div>' +
         '<div class="history-time">' + timeStr + '</div>' +
         '<div class="history-cities">' + citiesStr + '</div>' +
@@ -1081,3 +1083,121 @@ function initHomePage() {
   } catch (e) {}
   startListener();
 }
+
+function shareAlertData(docId, isHistory, ids) {
+  var t = I18N[LANG] || I18N.he;
+  var url = location.origin + location.pathname;
+  var text = '';
+  if (isHistory) {
+    url += '?histIds=' + encodeURIComponent(ids);
+    var block = document.querySelector('.history-block[data-ids="' + ids + '"]');
+    if (block) {
+      var typeEl = block.querySelector('.history-type');
+      var citiesEl = block.querySelector('.history-cities');
+      var timeEl = block.querySelector('.history-time');
+      text = (typeEl ? typeEl.textContent : '') + ': ' + (citiesEl ? citiesEl.textContent : '') + ' • ' + (timeEl ? timeEl.textContent : '');
+    }
+  } else {
+    url += '?id=' + encodeURIComponent(docId);
+    var ablock = document.getElementById('block-' + docId);
+    if (ablock) {
+      var aType = ablock.querySelector('.alert-type');
+      var aCities = [];
+      ablock.querySelectorAll('.city-chip').forEach(function(chip) {
+        aCities.push(chip.textContent.trim());
+      });
+      text = (aType ? aType.textContent : '') + ': ' + aCities.slice(0, 5).join(', ');
+      if (aCities.length > 5) {
+        text += '...';
+      }
+    }
+  }
+  return { title: t.shareTitle || 'Share', text: text, url: url };
+}
+
+function openShareMenu(btn, data) {
+  closeShareMenu();
+  var t = I18N[LANG] || I18N.he;
+  var menu = document.createElement('div');
+  menu.className = 'share-menu';
+  menu.innerHTML =
+    '<button data-share="whatsapp">' + (t.shareWhatsApp || 'WhatsApp') + '</button>' +
+    '<button data-share="telegram">' + (t.shareTelegram || 'Telegram') + '</button>' +
+    '<button data-share="copy">' + (t.shareCopyLink || 'Copy link') + '</button>';
+  document.body.appendChild(menu);
+  var rect = btn.getBoundingClientRect();
+  menu.style.position = 'fixed';
+  menu.style.top = (rect.bottom + 6 + window.scrollY) + 'px';
+  var isRTL = (I18N[LANG] || I18N.he).dir === 'rtl';
+  if (isRTL) {
+    menu.style.right = (window.innerWidth - rect.right) + 'px';
+  } else {
+    menu.style.left = rect.left + 'px';
+  }
+  menu.querySelectorAll('button').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var kind = b.getAttribute('data-share');
+      var shareText = data.text + ' ' + data.url;
+      if (kind === 'whatsapp') {
+        window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
+      } else if (kind === 'telegram') {
+        window.open('https://t.me/share/url?url=' + encodeURIComponent(data.url) + '&text=' + encodeURIComponent(data.text), '_blank');
+      } else if (kind === 'copy') {
+        copyShareLink(data.url, btn);
+      }
+      closeShareMenu();
+    });
+  });
+  setTimeout(function() {
+    document.addEventListener('click', closeShareMenu, { once: true });
+  }, 10);
+}
+
+function closeShareMenu() {
+  document.querySelectorAll('.share-menu').forEach(function(m) {
+    m.remove();
+  });
+}
+
+function copyShareLink(url, btn) {
+  var t = I18N[LANG] || I18N.he;
+  function done() {
+    var tip = document.createElement('div');
+    tip.className = 'share-toast';
+    tip.textContent = t.shareCopied || 'Copied';
+    document.body.appendChild(tip);
+    setTimeout(function() { tip.remove(); }, 1800);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(done).catch(done);
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = url;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    done();
+  }
+}
+
+function handleShareClick(btn) {
+  var docId = btn.getAttribute('data-share-doc');
+  var isHistory = btn.getAttribute('data-share-history') === '1';
+  var ids = btn.getAttribute('data-share-ids') || docId;
+  var data = shareAlertData(docId, isHistory, ids);
+  if (navigator.share) {
+    navigator.share({ title: data.title, text: data.text, url: data.url }).catch(function() {});
+  } else {
+    openShareMenu(btn, data);
+  }
+}
+
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.share-btn');
+  if (btn) {
+    e.stopPropagation();
+    handleShareClick(btn);
+  }
+});
