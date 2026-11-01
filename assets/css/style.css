@@ -1491,3 +1491,10 @@ html[dir="ltr"] .history-cat-tab {
   font-size: 14px;
   z-index: 1001;
 }
+
+.legal-version {
+  font-size: 11px;
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 8px;
+}

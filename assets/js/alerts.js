@@ -957,31 +957,43 @@ function initAlertPage(id) {
   document.body.style.direction = t.dir;
   loadCipo().then(function() {
     db.collection('alerts_cat10').doc(id).get().then(function(doc) {
-      if (!doc.exists) {
-        document.body.innerHTML = '<h1 class="error-title">' + t.notFound + '</h1>';
+      if (doc.exists) {
+        renderAlertDetail(doc.data());
         return;
       }
-      var data = doc.data();
-      var catKey = String(data.cat);
-      var catMeta = t.cat[catKey] || { emoji: '🚨', text: getCat10Title(data) || data.title || '🚨', instruction: '' };
-      var localizedTitle = getCat10Title(data);
-      var displayTitle = localizedTitle || catMeta.text;
-      var titleEl = document.getElementById('alert-title');
-      if (titleEl) {
-        titleEl.innerText = displayTitle;
-      }
-      document.title = t.siteTitle;
-      var cityNames = extractCities(data);
-      var subtitleEl = document.getElementById('alert-subtitle');
-      if (subtitleEl) {
-        subtitleEl.innerText = data.timestamp || '';
-      }
-      renderAlertDetailBody({ instructionText: catMeta.instruction, cityNames: cityNames, cat: data.cat });
+      db.collection('alerts_regular').doc(id).get().then(function(doc2) {
+        if (!doc2.exists) {
+          document.body.innerHTML = '<h1 class="error-title">' + t.notFound + '</h1>';
+          return;
+        }
+        renderAlertDetail(doc2.data());
+      }).catch(function(err) {
+        console.error(err);
+        document.body.innerHTML = '<h1 class="error-title">' + t.loadError + '</h1>';
+      });
     }).catch(function(err) {
       console.error(err);
       document.body.innerHTML = '<h1 class="error-title">' + t.loadError + '</h1>';
     });
   });
+}
+
+function renderAlertDetail(data) {
+  var catKey = String(data.cat);
+  var catMeta = t.cat[catKey] || { emoji: '🚨', text: getCat10Title(data) || data.title || '🚨', instruction: '' };
+  var localizedTitle = getCat10Title(data);
+  var displayTitle = localizedTitle || catMeta.text;
+  var titleEl = document.getElementById('alert-title');
+  if (titleEl) {
+    titleEl.innerText = displayTitle;
+  }
+  document.title = t.siteTitle;
+  var cityNames = extractCities(data);
+  var subtitleEl = document.getElementById('alert-subtitle');
+  if (subtitleEl) {
+    subtitleEl.innerText = data.timestamp || '';
+  }
+  renderAlertDetailBody({ instructionText: catMeta.instruction, cityNames: cityNames, cat: data.cat });
 }
 
 function initHistoryAlertPage(ids) {
