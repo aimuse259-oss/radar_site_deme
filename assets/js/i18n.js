@@ -100,6 +100,9 @@ var T = {
     tabPrivacy: 'מדיניות הפרטיות',
     tabTerms: 'תנאי השימוש',
     tabCredits: 'קרדיטים',
+    contactTitle: 'צור קשר',
+    contactText: 'אנחנו זמינים דרך הטלגרם בלבד',
+    contactLink: 'אפשר לכתוב לכאן',
     privacyPoints: [
       'האתר אינו אוסף מידע אישי ואינו דורש הרשמה.',
       'המיקום שלך (אם אישרת) משמש רק במכשיר שלך לאיתור העיר או המרחב, ואינו נשלח לשרתים שלנו.',
@@ -187,6 +190,9 @@ var T = {
     tabPrivacy: 'Privacy Policy',
     tabTerms: 'Terms of Use',
     tabCredits: 'Credits',
+    contactTitle: 'Contact Us',
+    contactText: 'We are available via Telegram only',
+    contactLink: 'You can write here',
     privacyPoints: [
       'The site does not collect personal information and does not require registration.',
       'Your location (if you allow it) is used only on your device to find your city or area, and is never sent to our servers.',
@@ -274,6 +280,9 @@ var T = {
     tabPrivacy: 'Политика конфиденциальности',
     tabTerms: 'Условия использования',
     tabCredits: 'Благодарности',
+    contactTitle: 'Связаться с нами',
+    contactText: 'Мы доступны только через Telegram',
+    contactLink: 'Можно написать сюда',
     privacyPoints: [
       'Сайт не собирает личную информацию и не требует регистрации.',
       'Ваше местоположение (если вы разрешили) используется только на вашем устройстве для определения города или региона и никогда не отправляется на наши серверы.',
@@ -361,6 +370,9 @@ var T = {
     tabPrivacy: 'سياسة الخصوصية',
     tabTerms: 'شروط الاستخدام',
     tabCredits: 'اعتمادات',
+    contactTitle: 'اتصل بنا',
+    contactText: 'نحن متاحون عبر تيليجرام فقط',
+    contactLink: 'يمكنك الكتابة هنا',
     privacyPoints: [
       'لا يجمع الموقع معلومات شخصية ولا يتطلب التسجيل.',
       'موقعك (إذا سمحت بذلك) يُستخدم فقط على جهازك لتحديد مدينتك أو منطقتك، ولا يُرسل أبداً إلى خوادمنا.',

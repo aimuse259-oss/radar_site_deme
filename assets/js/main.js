@@ -116,6 +116,31 @@ function applySavedToggles() {
     });
   }
 
+  var contactBtn = document.getElementById('contact-btn');
+  var contactModal = document.getElementById('contact-modal');
+  var contactClose = document.getElementById('contact-modal-close');
+  setText('contact-modal-title', t.contactTitle);
+  setText('contact-modal-text', t.contactText);
+  setText('contact-modal-link', t.contactLink);
+  if (contactBtn && contactModal) {
+    contactBtn.title = t.contactTitle;
+    contactBtn.addEventListener('click', function() {
+      contactModal.style.display = 'flex';
+    });
+  }
+  if (contactClose && contactModal) {
+    contactClose.addEventListener('click', function() {
+      contactModal.style.display = 'none';
+    });
+  }
+  if (contactModal) {
+    contactModal.addEventListener('click', function(e) {
+      if (e.target === contactModal) {
+        contactModal.style.display = 'none';
+      }
+    });
+  }
+
   var langBtn = document.getElementById('lang-btn');
   var langDropdown = document.getElementById('lang-dropdown');
   if (langBtn && langDropdown) {
