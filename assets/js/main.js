@@ -42,6 +42,8 @@ function applyStaticTranslations() {
   setText('sound-label', t.soundLabel);
   setText('sound-sub', t.soundSub);
   setText('notif-label', t.notifLabel);
+  setText('push-label', t.pushLabel);
+  setText('push-sub', t.pushSub);
   setText('notif-sub', t.notifSub);
   setText('readout-label', t.readoutLabel);
   setText('readout-sub', t.readoutSub);
@@ -65,6 +67,21 @@ function applySavedToggles() {
     var notifToggle = document.getElementById('notif-toggle');
     if (notifToggle) {
       notifToggle.checked = localStorage.getItem('radar_notif') === '1';
+    }
+    var pushToggle = document.getElementById('push-toggle');
+    if (pushToggle) {
+      pushToggle.checked = localStorage.getItem('radar_push') === '1';
+      pushToggle.addEventListener('change', function() {
+        if (pushToggle.checked) {
+          ensurePushSubscribed().then(function(ok) {
+            if (!ok) {
+              pushToggle.checked = false;
+            }
+          });
+        } else {
+          disablePush();
+        }
+      });
     }
     var readoutToggle = document.getElementById('readout-toggle');
     if (readoutToggle) {
@@ -218,3 +235,53 @@ function applySavedToggles() {
     });
   }
 })();
+var PUSH_VAPID_KEY = 'BOhLvGS5XkAE78IsuLQAEv4iyvQ-mwBHCVJ9sIg8qwzK6DanSSke1aIujTPNL3uOlpB1sMdCvwuIzUn9UJPZR7Q';
+
+async function ensurePushSubscribed() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    return false;
+  }
+  try {
+    const messaging = firebase.messaging();
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      return false;
+    }
+    const token = await messaging.getToken({
+      vapidKey: PUSH_VAPID_KEY,
+      serviceWorkerRegistration: reg,
+    });
+    if (!token) {
+      return false;
+    }
+    const areas = JSON.parse(localStorage.getItem('radar_areas') || '[]');
+    const cities = JSON.parse(localStorage.getItem('radar_cities') || '[]');
+    const docId = 'fcm_' + token.slice(-32).replace(/[^a-zA-Z0-9]/g, '');
+    await db.collection('push_subscriptions').doc(docId).set({
+      pushToken: token,
+      type: 'fcm',
+      areas: areas,
+      cities: cities,
+      lang: LANG,
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    localStorage.setItem('radar_push', '1');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function disablePush() {
+  try {
+    const messaging = firebase.messaging();
+    const token = await messaging.getToken();
+    if (token) {
+      const docId = 'fcm_' + token.slice(-32).replace(/[^a-zA-Z0-9]/g, '');
+      await db.collection('push_subscriptions').doc(docId).delete().catch(function() {});
+      await messaging.deleteToken();
+    }
+  } catch (e) {}
+  localStorage.removeItem('radar_push');
+}
+
