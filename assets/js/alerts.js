@@ -1214,6 +1214,7 @@ document.addEventListener('click', function(e) {
   var btn = e.target.closest('.share-btn');
   if (btn) {
     e.stopPropagation();
+    e.preventDefault();
     handleShareClick(btn);
   }
-});
+}, true);
