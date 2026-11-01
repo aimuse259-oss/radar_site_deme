@@ -1114,6 +1114,7 @@ function shareAlertData(docId, isHistory, ids) {
     var ablock = document.getElementById('block-' + docId);
     if (ablock) {
       var aType = ablock.querySelector('.alert-type');
+      var aTime = ablock.querySelector('.alert-timestamps');
       var aCities = [];
       ablock.querySelectorAll('.city-chip').forEach(function(chip) {
         aCities.push(chip.textContent.trim());
@@ -1121,6 +1122,9 @@ function shareAlertData(docId, isHistory, ids) {
       text = (aType ? aType.textContent : '') + ': ' + aCities.slice(0, 5).join(', ');
       if (aCities.length > 5) {
         text += '...';
+      }
+      if (aTime) {
+        text += ' • ' + aTime.textContent.trim();
       }
     }
   }
